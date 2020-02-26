@@ -1,0 +1,235 @@
+\ifnum\switch=1
+% -----------------------------------------------------------------------------
+% ------------------------------ Extended ToC ---------------------------------
+% -----------------------------------------------------------------------------
+\vspace{1.cm}
+This chapter is based on the following references: \cite{BenFroNabSzy01, ChaMat94, DolJolNat15, EchLieSzyTic18, EchLieTic19, ElmSilWat14, FraLiuRooStyZho09, Gal13, Gan08, GolVan13, Gre97, GriDolSil15, Hac10, HorJoh12, KopOri10, LanRosSzy91, LieStr03, LieStr12, Lin10, MacOriShi00, MacOriShi02, MilOriShi96, Sch69, Saa03, Smi85, Sty05, TosWid05, Var09}.
+
+\paragraph{Keywords:} Condition number, reorderings, M-matrices, projections, norms, permutations, preconditioning, (should this be the first section of this chapter?)
+
+\section{Preliminaries of Linear Algebra}
+This section is based on the following references: \cite{Gal13, GolVan13, HorJoh12, Saa03}.
+
+
+\else
+% -----------------------------------------------------------------------------
+% --------------------------- Content of Chapter ------------------------------
+% -----------------------------------------------------------------------------
+
+
+\section{Preliminaries of Linear Algebra}
+\label{App:linalg}
+
+% This section introduces and recalls basic properties of bounded linear
+% operators between Hilbert spaces.
+
+The analysis of many numerical techniques is based on understanding the
+behavior of the successive powers of a given matrix. In this regard, the
+following theorem plays a fundamental role in numerical linear algebra,
+more particularly in the analysis of iterative methods. [Saad, Linear systems]
+
+\begin{definition}[normal matrix]
+A matrix is said to be normal if it commutes with its conjugate transpose,
+i.e., if it satisfies the relation
+\[\A^H\A=\A\A^H.\]
+\end{definition}
+
+An immediate property of normal matrices is stated in the following lemma.
+%
+\begin{lemma}
+If a normal matrix is triangular, then it is a diagonal matrix.
+\end{lemma}
+%
+\begin{thm}
+A matrix is normal if and only if it is unitarily similar to a diagonal
+matrix.
+\end{thm}
+%
+Thus, any normal matrix is diagonalizable and admits an orthonormal basis of
+eigenvectors, namely, the column vectors of $\Q$.
+
+Projections play a major role in this thesis due to the fact that the
+studied iterative methods like the multiplicative Schwarz method or the GMRES
+can be characterized mathematically by projections.
+
+
+% Recall that a nonsingular matrix $\B=[b_{i,j}]$ is called an \emph{$M$-matrix}
+% when $b_{i,i}>0$ for all $i$, $b_{i,j}\leq 0$ for all $i\neq j$, and
+% $\B^{-1}\geq 0$ (elementwise).
+%
+%
+% \begin{lemma}
+% \label{lem:1D:MMat}
+% Let $\B$ be an $\ell\times \ell$ tridiagonal Toeplitz matrix,
+% %
+% \begin{equation*}%\label{eq:tridiag}
+% \B=\left[\begin{array}{cccc}
+% \hat{a} & \hat{b}\\
+% \hat{c} & \ddots & \ddots\\
+%  & \ddots & \ddots & \hat{b}\\
+%  &  & \hat{c} & \hat{a}
+% \end{array}\right],
+% \end{equation*}
+% %
+% with $\hat{a}>0$ and $\hat{b},\hat{c}<0$. Moreover, let $\B$ be diagonally
+% dominant, i.e., $\hat{a}\geq |\hat{b}|+|\hat{c}|$. Then $\B$ is an $M$-matrix
+% with $\B^{-1}>0$ (elementwise),
+% %
+% \begin{equation}\label{eq:min_cond}
+% \left(\B^{-1}\right)_{\ell,\ell}=\left(\B^{-1}\right)_{1,1} \leq \min\left\{\frac{1}{|\hat{b}|},\frac{1}{|\hat{c}|}\right\},
+% \end{equation}
+% %
+% and the entries of $\B^{-1}$ decay along the columns away from the diagonal.
+% In particular,
+% %
+% \begin{align*}
+% \left(\B^{-1}\right)_{1,1} & > \left(\B^{-1}\right)_{i,1}\quad \mbox{for}\quad 1<i\leq\ell,\\
+% \left(\B^{-1}\right)_{\ell,\ell} & > \left(\B^{-1}\right)_{i,\ell}\quad \mbox{for}\quad 1\leq i<\ell.
+% \end{align*}
+% %
+% \end{lemma}
+% %
+% \begin{proof}
+% The matrix $\B$ is an $M$-matrix since its entries satisfy the sign condition
+% and $\B$ is irreducibly diagonally dominant; see, e.g.,~\cite[Theorem 6.2.3,
+% Condition M35]{BerPle94} or \cite[Criterion~4.3.10]{Hac10}.
+% The elementwise nonnegativity of the inverse, $\B^{-1}>0$, follows since the
+% $M$-matrix $\B$ is irreducible; see, e.g.,~\cite[Theorem 6.2.7]{BerPle94} or
+% \cite[Theorem~4.3.11]{Hac10}.
+%
+% Since $\B$ is a tridiagonal Toeplitz matrix, its $(1,1)$ and $(\ell,\ell)$
+% minors are equal. Therefore the classical formula
+% $\B^{-1}=(\det(B))^{-1}\textrm{adj}(\B)$ implies that
+% $\left(\B^{-1}\right)_{1,1}=\left(\B^{-1}\right)_{\ell,\ell}$. Moreover, since
+% $\hat{a}\geq |\hat{b}|+|\hat{c}|$, we can
+% apply~\cite[Lemma~2.1, equation (2.8)]{Nabben99} to obtain
+% %
+% $$
+% \left(\B^{-1}\right)_{1,1} \leq \frac{1}{\hat{a}-|\hat{b}|}\leq \frac{1}{|\hat{c}|},\quad
+% \left(\B^{-1}\right)_{\ell,\ell} \leq \frac{1}{\hat{a}-|\hat{c}|}\leq \frac{1}{|\hat{b}|}.$$
+% %
+% Finally, the bounds on the entries of $\B^{-1}$ are special cases
+% of~\cite[Theorem 3.11]{Nabben99}, where it was shown that
+% %
+% $$\left(\B^{-1}\right)_{i,j}\leq \omega^{i-j} \left(\B^{-1}\right)_{j,j}\ \ \mbox{for}\ \ i\geq j
+% \quad\mbox{and}\quad
+% \left(\B^{-1}\right)_{i,j}\leq \tau^{j-i} \left(\B^{-1}\right)_{j,j}\ \ \mbox{for}\ \ i\leq j, $$
+% %
+% with some $\tau,\omega\in (0,1)$. (They can be expressed explicitly using the
+% entries of $\B$.)
+% \end{proof}
+
+
+
+
+% \section{Column Block Diagonal Dominance of Matrices}
+% \label{App:BDiDo:ColBDiDo}
+%
+% According to the results presented in Chapter~\ref{ch:BDiDo}, the property of
+% \emph{column} block diagonal dominance of matrices is defined as follows:
+% \begin{definition}\label{def:App:colbdd}
+% Consider a matrix of the form
+% %
+% \begin{equation}\label{eq:app:blockmatrix}
+% \A=[\A_{ij}]\quad
+% \mbox{with blocks $\A_{ij}\in\mathbb{C}^{m\times m}$ for $i,j=1,\dots,n$.}
+% \end{equation}
+% %
+% The matrix $\A$ is called \emph{column block diagonally dominant} (with respect
+% to the matrix norm $\|\cdot\|$) when the diagonal blocks $\A_{jj}$ are
+% nonsingular, and
+% %
+% \begin{equation}\label{eq:app:blocdiagdom1}
+% \sum_{\atopfrac{i=1}{i\neq j}}^{n} \|\A_{ij}\A_{jj}^{-1}\| \leq 1,
+% \quad \text{for $j=1,\dots,n$}.
+% \end{equation}
+% %
+% If strict inequality holds in \eqref{eq:app:blocdiagdom1} then $\A$ is called
+% \emph{column block strictly diagonally dominant} (with respect to the matrix
+% norm $\|\cdot\|$).
+% \end{definition}
+%
+% Now, restricting our attention to block tridiagonal matrices of the form
+% \eqref{eq:BDiDo:blocktridiag} and following the notation of that chapter, in
+% order to obtain analogous bounds for the norms of the inverses of a column
+% block diagonally dominant matrix we fist need to set $\B_0~=~\C_n~=~0$, and
+% define the \emph{new} quantities
+% %
+% \begin{eqnarray*}
+% \tilde{\tau}_i   &=& \frac{\|\C_i\A_i^{-1}\|}{1-\|\B_{i-1}\A_i^{-1}\|},
+% \quad \text{for $i=1,\ldots,n$}, \\
+% \tilde{\omega}_i &=& \frac{\|\B_{i-1}\A_i^{-1}\|}{1-\|\C_{i}\A_i^{-1}\|},
+% \quad \text{for $i=1,\ldots,n$}.
+% \end{eqnarray*}
+% %
+% The column block diagonal dominance of $\A$ then implies that
+% $0~\leq ~\tilde{\tau}_i\leq~1$ and $0~\leq~\tilde{\omega}_i~\leq~1$.
+% Using these quantities we obtain the following result.
+% %
+% \begin{thm}
+% Let $A$  be as in \eqref{eq:BDiDo:blocktridiag} and suppose that
+% $\A_i^{-1}$ as well as $\B_i^{-1}$ and $\C_i^{-1}$ for $i=1,\ldots,n-1$ exist.
+% Suppose in addition that $\A$ is column block diagonally dominant, and that
+% %
+% \begin{equation}\label{eq:app:blktridom_b}
+% \|\C_1\A_1^{-1}\|<1 \quad \mbox{and} \quad \|\B_{n-1}\A_n^{-1}\|<1.
+% \end{equation}
+% %
+% Then $\A^{-1}=[\Z_{ij}]$ with
+% %
+% \begin{eqnarray}
+% \|\Z_{ij}\| & \leq & \|\Z_{ii}\| \prod_{k=i+1}^{j}\tilde{\omega}_k,
+% \quad\text{for all $i<j$}, \label{eq:app:offdiagbound1}\\
+% \|\Z_{ij}\| & \leq & \|\Z_{ii}\| \prod_{k=j}^{i-1}\tilde{\tau}_k,
+% \qquad\text{for all $i>j$}.\label{eq:app:offdiagbound2}
+% \end{eqnarray}
+% %
+% Moreover, for $i=1,\dots,n$,
+% %
+% \begin{equation}\label{eq:app:diagbounds}
+% \frac{\|\I\|}
+% {\|\A_i\|+\tilde{\tau}_{i-1}\|\B_{i-1}\|+\tilde{\omega}_{i+1}\|\C_{i}\|}
+% \leq
+% \|\Z_{ii}\|
+% \leq
+% \frac{\|\I\|}
+% {\|\A_i^{-1}\|^{-1}-\tilde{\tau}_{i-1}\|\B_{i-1}\|-\tilde{\omega}_{i+1}\|\C_i\|},
+% \end{equation}
+% %
+% provided that the denominator of the upper bound is larger than zero,
+% and where we set $\B_0=\C_n=0$, and $\tilde{\tau}_0=\tilde{\omega}_{n+1}=0$.
+% \end{thm}
+%
+% \begin{proof}
+% The proof of this theorem is completely analogous to the one of
+% Theorem~\ref{thm:BDiDo:blockbounds} for row block diagonally dominant matrices
+% when the necessary adaptations are made, i.e., by performing the following
+% changes:
+% %
+% \begin{itemize}
+%
+% \item Formulate Lemma~\ref{lem:BDiDo:sequences} for the matrices $\X_i$ and
+% $\V_i$, showing that the sequence $\{\|\X_i\|\}_{i=1}^n$ is strictly increasing
+% while the sequence $\{\|\V_i\|\}_{i=1}^n$ is strictly decreasing.
+%
+% \item Formulate Lemma~\ref{lem:BDiDo:nonsing} for the matrices
+% $\tilde{\L}_1=\tilde{\T}_1=\C_1\A_1^{-1}$, $\tilde{\T}_2=\I-\tilde{\T}_1\B_1\A_2^{-1}$,
+% $\tilde{\L}_i = \C_{i}\A_i^{-1}\tilde{\T}_i^{-1}$, and
+% $\tilde{\T}_i = \I-\tilde{\L}_{i-1}\B_{i-1}\A_i^{-1}$. Analogously for $\tilde{\M}_i$
+% and $\tilde{\W_i}$, etc.
+%
+% \item Formulate Lemma~\ref{lem:BDiDo:recurrenceUY} for the matrices $\X_i$ and
+% $\V_i$, in particular showing that
+% $$
+% \X_i=-\X_{i+1}\tilde{\L}_i,\quad\mbox{and}\quad \V_i=-\V_{i-1}\tilde{\M}_i.
+% $$
+%
+% \item In the proof of Theorem~\ref{thm:BDiDo:blockbounds} use the the
+% aforementioned results and use equation $\Z\A=\I$ instead of $\A\Z=\I$.
+% \end{itemize}
+% %
+% Following these changes and proceeding analogously to the proof
+% of Theorem~\ref{thm:BDiDo:blockbounds} yields the desired result.
+% \end{proof}
+
+\fi % end of if statement regarding content shown

@@ -1,0 +1,405 @@
+\usepackage[l2tabu,orthodox]{nag} % warn about bad habits :)
+\usepackage[T1]{fontenc} % font encoding (allows hyphenation with umlaut)
+\usepackage[utf8]{inputenc} % allow utf-8 characters
+\usepackage{lmodern} % nice font
+\usepackage{graphicx}
+%\usepackage{epstopdf}
+\usepackage[english]{babel} % hyphenation, bibliography, chapter, section, ...
+\usepackage{datetime}
+\usepackage{appendix}
+\usepackage{stmaryrd}
+\usepackage{rotating}
+\usepackage{csquotes} % context sensitive quotes
+\usepackage{amsmath,amsfonts,amssymb} % ams
+\usepackage{amsthm} % enhanced \newtheorem
+\usepackage{microtype} % nicer letter spacing
+\usepackage{scrhack} % scrbook + float fix http://tex.stackexchange.com/questions/51867/koma-warning-about-toc
+\allowdisplaybreaks % allow breaks in align, ...
+
+% manual hyphenation (separated by spaces)
+\hyphenation{
+  ma-the-ma-tisch-en
+  Schr\"o-ding-er
+  Eli-sa-beth
+}
+
+% configure bibliography
+\usepackage[backend=biber,safeinputenc,firstinits=true,doi=false,isbn=false,url=false,maxbibnames=5]{biblatex}
+%\usepackage{biblatex}
+\addbibresource{dissertation.bib}
+
+% insert git revision
+%\input{revision.tex}
+
+\newcommand{\doctitle}{Iterative Solution of Discretized Convection-Diffusion~Problems}
+\newcommand{\docsubtitle}{Theory and Practice}
+% \newcommand{\doctitle}{Iterative Solution of Discretized Convection-Diffusion~Problems}
+% \newcommand{\docsubtitle}{Theory and Practice}
+\newcommand{\docauthor}{Carlos Echeverr{\'i}a Serur}
+\newcommand{\docdate}{\currenttime}
+% set title, subtitle, author, ... for titlepage
+\title{\doctitle}
+\subtitle{\docsubtitle}
+\author{\docauthor}
+\date{\docdate}
+
+\usepackage{caption}
+\usepackage[font=normalsize]{subcaption}
+\renewcommand{\topfraction}{0.75}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\usepgfplotslibrary{groupplots}
+\usepackage{tikz}
+\usetikzlibrary{matrix,arrows,shapes,positioning}
+\usetikzlibrary{calc,tikzmark}
+\usetikzlibrary{intersections}
+\usetikzlibrary{patterns}
+\usetikzlibrary{math} %needed tikz library
+%\usetikzlibrary{decorations.markings}
+
+\newcommand{\cross}{$\mathbin{\tikz [x=1.4ex,y=1.4ex,line width=.2ex, black] \draw (0,0) -- (1,1) (0,1) -- (1,0);}$}%
+% \usetikzlibrary{decorations.markings}
+
+% uncomment next 3 lines to disable caching of pgf plots
+%\usepgfplotslibrary{external}
+%\tikzexternalize[mode=list and make]{main}
+%\tikzsetexternalprefix{cache/}
+
+
+
+
+% -----------------------------------------------------------------------------
+% maybe these can removed in the final version (smileys, skulls, ...)
+% maybe you have to run pdflatex once instead of lualatex!
+\usepackage{skull} % \skull
+\usepackage{marvosym} % \Smiley{}
+% 'debug' mode:
+% \usepackage{todonotes} % \todo{}
+%\usepackage{showkeys} % show ref keys
+% \usepackage{refcheck} % check for numbered but unlabeled refs and unreferenced labels
+% -----------------------------------------------------------------------------
+
+\usepackage{bbm} % allow for double stroked small letters
+\usepackage{MnSymbol}
+\usepackage{color}
+\usepackage{tabularx}
+\usepackage{diagbox}
+\usepackage{booktabs}
+\usepackage{multirow} % cell spanning multiple rows
+\usepackage{xstring}
+\usepackage{ifthen}
+\usepackage{mathdots} % nicer ddots in matrices
+\usepackage{enumitem} % resumed enumerates
+\setlist[enumerate,2]{ref=\theenumi.\alph*)} % ref nested like 2.a)
+
+\usepackage{ccicons} % creative commons icons
+%\usepackage{titling} % custom title page
+\usepackage{numprint} % pretty print numbers
+\usepackage{varwidth} % center itemize/description
+
+\usepackage{algorithm} % algorithm floating env
+\usepackage{algpseudocode} % algorithmicx
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\newcommand{\pushcode}[1][1]{\hskip#1\dimexpr\algorithmicindent\relax}
+\newcommand{\algindent}[1]{\dimexpr\algorithmicindent*#1\relax}
+\newcommand{\algwidth}[1]{\dimexpr\linewidth-\algorithmicindent*#1\relax}
+\newcommand{\algmulti}[2][]{\parbox[t]{\algwidth{#1}}{#2\strut}}
+
+\usepackage{listings} % actual code
+\lstset{
+  language=Python, % Python, Python, Python!
+  basicstyle=\ttfamily, % monospaced font
+  breaklines=true, % break lines
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray},
+  xleftmargin=0.5cm,
+}
+
+% http://tex.stackexchange.com/questions/33979/include-a-line-break-in-algorithmic-while-maintaining-indentation
+%\usepackage{varwidth} % for multilines in algorithms (like minipages)
+
+\usepackage[normalem]{ulem} % used for strikeout \sout
+% The bm package defines a command \bm which makes its argument bold.
+% The argument may be any maths object from a single symbol to an expression.
+% This is closely related to the specification of the \boldsymbol command in
+% AMS-LaTeX, but \bm is rather more careful in the way it does things.
+\newcommand\bmmax{2}
+\usepackage{bm}
+\usepackage{calrsfs}
+\DeclareMathAlphabet{\mathscr}{OMS}{zplm}{m}{n}
+\usepackage{chngcntr} % number figures, algorithms by chapter, e.g., Algo. 2.1
+\counterwithin{figure}{chapter}
+\counterwithin{algorithm}{chapter}
+\counterwithin{table}{chapter}
+
+\usepackage{hyperxmp} % metadata for pdf/a-1b
+\usepackage[pdfa]{hyperref} % load as last package! contains url package
+\hypersetup{
+  draft=false,
+  pdftitle={\doctitle~--~\docsubtitle},
+  pdfauthor={\docauthor},
+  pdfcontactemail={echeverriacarlos@gmail.com},
+  pdfcopyright={Copyright (C) 2017, \docauthor.
+    This work is licensed under the Creative Commons Attribution-ShareAlike 4.0
+    International License (CC-BY-SA 4.0).},
+  pdflicenseurl={http://creativecommons.org/licenses/by-sa/4.0/deed.en\_US},
+  pdfkeywords={Dissertation, mathematics, numerical analysis, Krylov,
+    linear system, nonnormal, convection-diffusion, multiplicative Schwarz},
+  pdfsubject={Dissertation of \docauthor on the iterative solution of nonnormal linear algebraic systems arising in convection-diffusion problems.},
+  pdflang={en},
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=blue,
+  filecolor=cyan,
+  urlcolor=red
+}
+
+% embed color profile
+% cf. http://ioctl.eu/blog/2009/02/21/pdflatex_colorprofiles/
+% and http://tex.stackexchange.com/questions/95792/device-independent-color
+%\immediate\pdfobj stream attr{/N 4} file{eci_rgb_profile/eciRGB_v2.icc}
+%\pdfcatalog{%
+%/OutputIntents [ <<
+%/Type /OutputIntent
+%/S/GTS_PDFA1
+%/DestOutputProfile \the\pdflastobj\space 0 R
+%/OutputConditionIdentifier (CGATS TR001)
+%>> ]
+%}
+
+% uppercase cali: operators on infinite-dimensional spaces
+\newcommand\operatorinf[1]{\ensuremath{\mathsf{#1}}}
+% uppercase bold: operators on finite-dimensional spaces (also matrices)
+\newcommand\operatorfin[1]{\ensuremath{\mathbf{#1}}}
+% lowercase: vector
+\newcommand\vect[1]{\ensuremath{#1}}
+% uppercase: tuples of vectors
+\newcommand\vecttuple[1]{\ensuremath{#1}}
+% uppercase: vector-spaces
+\newcommand\vectspace[1]{\ensuremath{\mathcal#1}}
+% input autogenerated commands
+%\input{autogen_commands.tex}
+
+% number sets
+\newcommand\N{\ensuremath{\mathbb{N}}}
+\renewcommand\Re{\ensuremath{\mathbb{R}}}
+\newcommand\Co{\ensuremath{\mathbb{C}}}
+\newcommand\Polys{\ensuremath{\mathbb{P}}}
+
+
+% other helpers
+\newcommand\DEF{\ensuremath{\mathrel{\mathop:}=}}
+\newcommand\FED{\ensuremath{\mathrel{=\mathop:}}}
+\newcommand\igralnl[4]{\ensuremath{\int\nolimits_{#1}^{#2} #3 \, \mathrm{d} #4}}
+\newcommand\iu{\ensuremath{\mathbbm{i}}} % imaginary unit
+\newcommand\e{\ensuremath{\mathrm{e}}} % Euler's number
+\newcommand\clos[1]{\ensuremath{\overline{#1}}} % closure
+\newcommand\conj[1]{\ensuremath{\overline{#1}}} % complex conjugate
+\newcommand\tp{\ensuremath{\mathsf{T}}} % transpose
+\newcommand\htp{\ensuremath{\mathsf{H}}} % hermitian transpose
+\newcommand\inv{\ensuremath{{-1}}} % inverse
+\newcommand\adj{\ensuremath{{\star}}} % adjoint
+\newcommand\idx{\ensuremath{{(i)}}}
+\newcommand\til[1]{\ensuremath{\widetilde{#1}}}
+\newcommand\wh[1]{\ensuremath{\widehat{#1}}}
+\newcommand\restr[2]{\ensuremath{\left.{#1}\right|_{#2}}}
+\newcommand\id{\ensuremath{\mathsf{id}}}
+\newcommand\zr{\ensuremath{\mathsf{0}}}
+\newcommand{\mat}[1]{\begin{bmatrix}#1\end{bmatrix}}
+\newcommand\LRA{\ensuremath{\Longrightarrow}}
+\newcommand\lra{\ensuremath{\longrightarrow}}
+\newcommand\LLRA{\ensuremath{\Longleftrightarrow}}
+\newcommand\llra{\ensuremath{\longleftrightarrow}}
+\newcommand\RA{\ensuremath{\Rightarrow}}
+\newcommand\ra{\ensuremath{\rightarrow}}
+\newcommand{\Span}[1]{\ensuremath\lsem{#1}\rsem}
+\newcommand\eff{\ensuremath{\text{eff}}}
+\newcommand\CG{\ensuremath{\text{CG}}} % conjugate gradient
+\newcommand\MR{\ensuremath{\text{MR}}} % minimal residual
+\newcommand\Laplace{\ensuremath{\Delta}}
+\newcommand\PetrovAndOrGalerkin{\mbox{(Petrov--)}\allowbreak Galerkin}
+\newcommand\vsV{\ensuremath{\mathcal}}
+\newcommand{\eps} {\varepsilon}
+
+% inner product
+%  \ip{x}{y}    results in <x,y>
+%  \ip[M]{x}{y} results in <x,y>_M
+\newcommand{\ip}[3][]{\ensuremath{{\left\langle{#2},{#3}\right\rangle}_{#1}}}
+% ip dots
+\newcommand{\ipdots}[1][]{\ensuremath{{\left\langle{\cdot},{\cdot}\right\rangle}_{#1}}}
+% norm
+\newcommand{\nrm}[2][]{\ensuremath{\left\|#2\right\|_{#1}}}
+\newcommand{\nrmdots}[1][]{\ensuremath{\left\|\cdot\right\|_{#1}}}
+% 2-norm
+\newcommand{\nrmeuc}[1]{\nrm[2]{#1}}
+% norm induced by inner product
+\newcommand{\nrmip}[1]{\nrm[\ipdots]{#1}}
+% absolute value
+\newcommand{\abs}[1]{\left|#1\right|}
+
+% input experiment
+%\newcommand{\inputplot}[1]{\input{figures/#1.tikz}}
+% \protect is from http://www.latex-community.org/forum/viewtopic.php?f=5&t=12497
+%\newcommand{\inputraw}[1]{\protect\input{raw/#1}}
+
+\newcommand{\atopfrac}[2]{\genfrac{}{}{0pt}{}{#1}{#2}}
+
+
+\newcommand{\cred}[1]{{\color{red}{#1}}}
+\newcommand{\cblue}[1]{{\color{blue}{#1}}}
+
+\newcommand{\klein}[1]{\scriptscriptstyle #1}
+\newcommand{\entryvE}{\ensuremath{b_{\klein{H}}}}
+\newcommand{\entryvW}{\ensuremath{c_{\klein{H}}}}
+\newcommand{\entryvC}{\ensuremath{a_{\klein{H}}}}
+\newcommand{\entryvN}{\ensuremath{e_{\klein{H}}}}
+\newcommand{\entryvS}{\ensuremath{d_{\klein{H}}}}
+\newcommand{\entrywE}{\ensuremath{b_{\klein{h}}}}
+\newcommand{\entrywW}{\ensuremath{c_{\klein{h}}}}
+\newcommand{\entrywC}{\ensuremath{a_{\klein{h}}}}
+\newcommand{\entrywN}{\ensuremath{e_{\klein{h}}}}
+\newcommand{\entrywS}{\ensuremath{d_{\klein{h}}}}
+\newcommand{\entryzE}{\ensuremath{b}}
+\newcommand{\entryzW}{\ensuremath{c}}
+\newcommand{\entryzC}{\ensuremath{a}}
+\newcommand{\dsd}{\ensuremath{d}}
+\newcommand{\dsH}{\ensuremath{d_{\klein{H}}}}
+\newcommand{\dsh}{\ensuremath{d_{\klein{h}}}}
+\newcommand{\entryzN}{\ensuremath{e}}
+\newcommand{\entryzS}{\ensuremath{d}}
+\newcommand{\matAH}{\ensuremath{\mathbf{A}_{\klein{H}}}}
+\newcommand{\matAHhat}{\ensuremath{\widehat{\mathbf{A}}_{\klein{H}}}}
+%\newcommand{\matBH}{\ensuremath{\hat{B}}}
+\newcommand{\matBH}{\ensuremath{\mathbf{B}_{\klein{H}}}}
+\newcommand{\matCH}{\ensuremath{\mathbf{C}_{\klein{H}}}}
+\newcommand{\matAh}{\ensuremath{\mathbf{A}_{\klein{h}}}}
+\newcommand{\matAhhat}{\ensuremath{\widehat{\mathbf{A}}_{\klein{h}}}}
+\newcommand{\matBh}{\ensuremath{\mathbf{B}_{\klein{h}}}}
+\newcommand{\matCh}{\ensuremath{\mathbf{C}_{\klein{h}}}}
+%\newcommand{\matCh}{\ensuremath{\tilde{C}}}
+\newcommand{\matA}{\ensuremath{\widehat{\mathbf{A}}}}
+%\newcommand{\suAs}{\ensuremath{\widetilde{A}}}
+\newcommand{\matB}{\ensuremath{\mathbf{B}}}
+\newcommand{\matC}{\ensuremath{\mathbf{C}}}
+\newcommand{\matSH}{\ensuremath{\mathbf{S}_{\klein{H}}}}
+\newcommand{\matSh}{\ensuremath{\mathbf{S}_{\klein{h}}}}
+\newcommand{\matSs}{\ensuremath{\mathbf{S}}}
+\newcommand{\matNH}{\ensuremath{\mathbf{N}_{\klein{H}}}}
+\newcommand{\matNh}{\ensuremath{\mathbf{N}_{\klein{h}}}}
+\newcommand{\matNs}{\ensuremath{\mathbf{N}}}
+\newcommand{\piOne}{\ensuremath{\pi^{\klein{(1)}}}}
+\newcommand{\piTwo}{\ensuremath{\pi^{\klein{(2)}}}}
+\newcommand{\pOne}{\ensuremath{\mathbf{p}^{\klein{(1)}}}}
+\newcommand{\pTwo}{\ensuremath{\mathbf{p}^{\klein{(2)}}}}
+\newcommand{\PiOne}{\ensuremath{\mathbf{\Pi}^{\klein{(1)}}}}
+\newcommand{\PiTwo}{\ensuremath{\mathbf{\Pi}^{\klein{(2)}}}}
+\newcommand{\POne}{\ensuremath{\mathbf{P}^{\klein{(1)}}}}
+\newcommand{\PTwo}{\ensuremath{\mathbf{P}^{\klein{(2)}}}}
+\newcommand{\pI}{\ensuremath{p^{\klein{(i)}}}}
+\newcommand{\pII}{\ensuremath{\mathbf{p}^{\klein{(i)}}}}
+\newcommand{\Ubar}{\overline{U}}
+\newcommand{\pe}{\psi}
+\newcommand{\Tr}{\ensuremath{\klein{T}}}
+
+% vector quantities
+\newcommand\A{\ensuremath{\mathbf{A}}}
+\newcommand\B{\ensuremath{\mathbf{B}}}
+\newcommand\C{\ensuremath{\mathbf{C}}}
+\newcommand\D{\ensuremath{\mathbf{D}}}
+\newcommand\E{\ensuremath{\mathbf{E}}}
+\newcommand\F{\ensuremath{\mathbf{F}}}
+\newcommand\G{\ensuremath{\mathbf{G}}}
+\renewcommand\H{\ensuremath{\mathbf{H}}}
+\newcommand\I{\ensuremath{\mathbf{I}}}
+\renewcommand\L{\ensuremath{\mathbf{L}}}
+\newcommand\M{\ensuremath{\mathbf{M}}}
+\renewcommand\N{\ensuremath{\mathbf{N}}}
+\renewcommand\O{\ensuremath{\mathbf{O}}}
+\renewcommand\P{\ensuremath{\mathbf{P}}}
+\newcommand\Q{\ensuremath{\mathbf{Q}}}
+\newcommand\R{\ensuremath{\mathbf{R}}}
+% \renewcommand\S{\ensuremath{\mathbf{S}}}
+\newcommand\T{\ensuremath{\mathbf{T}}}
+\newcommand\U{\ensuremath{\mathbf{U}}}
+\newcommand\V{\ensuremath{\mathbf{V}}}
+\newcommand\W{\ensuremath{\mathbf{W}}}
+\newcommand\X{\ensuremath{\mathbf{X}}}
+\newcommand\Y{\ensuremath{\mathbf{Y}}}
+\newcommand\Z{\ensuremath{\mathbf{Z}}}
+\renewcommand\b{\ensuremath{\mathbf{b}}}
+\renewcommand\e{\ensuremath{\mathbf{e}}}
+\newcommand\f{\ensuremath{\mathbf{f}}}
+\newcommand\n{\ensuremath{\bm{n}}}
+\renewcommand\r{\ensuremath{\mathbf{r}}}
+\renewcommand\u{\ensuremath{\mathbf{u}}}
+\renewcommand\v{\ensuremath{\mathbf{v}}}
+\newcommand\x{\ensuremath{\mathbf{x}}}
+\newcommand\y{\ensuremath{\mathbf{y}}}
+\newcommand\om{\ensuremath{\bm{\omega}}}
+\newcommand\xib{\ensuremath{\bm{\xi}}}
+
+
+% -----------------------------------------------------------------------------
+\DeclareMathOperator{\spn}{span}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\range}{range}
+\DeclareMathOperator{\argmin}{argmin}
+\DeclareMathOperator{\In}{In}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\Real}{Re}
+\DeclareMathOperator{\Imag}{Im}
+\DeclareMathOperator{\AMG}{AMG}
+\DeclareMathOperator{\tridiag}{tridiag}
+
+% -----------------------------------------------------------------------------
+\newlength\figurewidth
+\newlength\figureheight
+
+% -----------------------------------------------------------------------------
+\newtheorem{thm}{Theorem}[chapter] % numbering by chapter, e.g., Theorem 2.12
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{example}[thm]{Example}%[section]
+% \theoremstyle{definition}
+\newtheorem{definition}[thm]{Definition}
+\newtheorem{rmk}[thm]{Remark}
+\newtheorem{ex}[thm]{Example}
+\newtheorem{ass}[thm]{Assumption}
+\newtheorem{setup}[thm]{Setup}
+
+
+
+% customize dictum format:
+\setkomafont{dictumtext}{\itshape\small}
+\setkomafont{dictumauthor}{\normalfont}
+\renewcommand*\dictumwidth{\linewidth}
+\renewcommand*\dictumauthorformat[1]{--- #1}
+\renewcommand*\dictumrule{}
+
+\newcommand{\td}[1]{\todo[color=green!40]{#1}}
+
+% \newenvironment{poliabstract}[1]
+%    {\renewcommand{\abstractname}{#1}\begin{abstract}}
+%    {\end{abstract}}
+
+
+\newenvironment{changemargin}[2]{%
+\begin{list}{}{%
+\setlength{\topsep}{0pt}%
+\setlength{\leftmargin}{#1}%
+\setlength{\rightmargin}{#2}%
+\setlength{\listparindent}{\parindent}%
+\setlength{\itemindent}{\parindent}%
+\setlength{\parsep}{\parskip}%
+}%
+\item[]}{\end{list}}
+
+
+\usepackage{afterpage}
+
+\newcommand\blankpage{%
+    \null
+    \thispagestyle{empty}%
+    \addtocounter{page}{-1}%
+    \newpage}

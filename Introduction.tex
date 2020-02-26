@@ -1,0 +1,364 @@
+\ifnum\switch=1
+%% -----------------------------------------------------------------------------
+% ------------------------------ Extended ToC ---------------------------------
+% -----------------------------------------------------------------------------
+
+Brief introductory commentary.
+
+\section{Scope and goals}
+The main question that this thesis aims to answer.
+
+\section{Summary of main results}
+The main findings of this Thesis are...
+
+\section{Content outline}
+Organization of the Thesis
+
+\else
+% -----------------------------------------------------------------------------
+% --------------------------- Content of Chapter ------------------------------
+% -----------------------------------------------------------------------------
+
+In a wide range of applications in the general field of scientific computing it
+is important to solve linear algebraic systems of the form
+\begin{equation}
+\label{eq:int:linsys}
+\A\u=\f,
+\end{equation}
+% $$
+% \mathcal{A}\mathcal{u}=\mathcal{f}
+% $$
+% $$
+% \A\u=\f
+% $$
+% $$
+% Au=f
+% $$
+where the matrix
+%$\A\in\C^{N\times N}$
+$\A\in\mathbb{C}^{N\times N}$ in \eqref{eq:int:linsys} is nonnormal,
+ill-conditioned and possesses a specific block sparse structure.
+% and the right hand side $b\in\C^N$.
+Very often, matrices of this class arise when discretizing boundary value
+problems (BVPs); mathematical models which try to describe the asymptotic
+(steady-state) solution of a particular partial differential equation (PDE)
+posed on a specific domain. In particular they appear in the discretization
+process of BVPs that describe the behavior of fluid flow, like the ones
+modelled by the steady-state convection-diffusion BVP:
+\begin{equation}
+\label{eq:int:BVP}
+-\epsilon \Delta u + \om\cdot\nabla u + \beta u = f
+\text{ in } \Omega, % = (0,1)\times(0,1),\quad
+\quad u = g,
+\text{ on } \partial\Omega.
+\end{equation}
+% \begin{equation}
+% \hspace*{2em}
+% \begin{cases}
+% -\epsilon \Delta u + \om \cdot \nabla u+\beta u = f, &
+% \text{ in }\; \Omega\in\Re^n\\
+% %\;\;u|_{\partial \Omega}=g. &
+% \hspace{2.96cm} u = g, &
+% \text{ on }\; \partial \Omega.
+% \end{cases}
+% \label{eq:int:BVP}
+% \end{equation}
+% Here the scalar-valued function $u(x,y)$ represents the concentration of a
+% transported quantity, $\alpha(x,y)=[a_1(x,y),a_2(x,y)]^T$ the velocity field,
+% $\epsilon$ the scalar diffusion parameter, and $\beta$ the scalar reaction
+% parameter. We assume that on $\overline{\Omega}$ the components of the %
+% velocity field are bounded, that is, $a_1(x,y)\geq\alpha_1>0$ and
+% $a_2(x,y)\geq\alpha_2>0$. Furthermore, we are interested in the
+% \textit{convection dominated} case, i.e., the case when
+% $\|\alpha\|\gg \epsilon >0$ in \eqref{eq:int:BVP}.
+% By making the assumptions that $\alpha$, $\beta$, and $f$ are sufficiently
+% smooth and that $\beta(x,y)-\frac{1}{2}\nabla \cdot \alpha(x,y)\geq C_0>0$ on
+% $\overline{\Omega}$ for some constant $C_0$, we ensure that \eqref{eq:int:BVP}
+% has a unique solution in the Sobolev space $H_0^1(\Omega)\cap H^2(\Omega)$
+% for all functions $f\in L^2(\Omega)$ \cite{FraLiuRooStyZho09}.
+In the PDE of problem \eqref{eq:int:BVP}, the scalar-valued function $u$ is
+commonly interpreted as the concentration of a transported quantity, $\om$ the
+velocity field or \textit{wind} where the concentration is transported,
+$\epsilon$~the scalar diffusion coefficient, and $\beta$ the scalar reaction
+coefficient~-~both measures of the amount of diffusion and
+production~/~destruction of the concentration throughout the domain $\Omega$.
+
+In most applications and relevant cases of convection-diffusion BVPs, it
+is important to study the \textit{convection dominated} regime, i.e., the cases
+when $\|\om\|\gg \epsilon >0$ in \eqref{eq:int:BVP}, leading to what is known in
+literature as a \textit{singularly perturbed} boundary value problem and where
+$\epsilon$ is known as the \textit{perturbation parameter}.
+One possible physical interpretation of this type of problems, as described by Elman, Silvester and Wathen in \cite{ElmSilWat14}, may be the
+following: the unknown function $u$ may represent the concentration of a
+pollutant, being transported, or ``convected'', along a river moving at velocity
+$\om$, while being subject to diffusive and reactive effects. In this context,
+the solution to the BVP would describe the final concentration of the pollutant
+at each point of the riverbed.
+
+Singularly perturbed convection-diffusion BVPs of type \eqref{eq:int:BVP} often
+exhibit the presence of \textit{boundary layers}, small regions of the domain
+$\Omega$ where the solution $u$ exhibits a sharp change in its gradient. In
+turn, the existence of boundary layers presents a challenge for numerical
+methods to finding an accurate numerical representation of $u$, and usually
+require special discretization techniques in order to guarantee the stability
+of a numerical solution method \cite{Mor96}. A very popular approach is to use finite
+difference methods for approximating the derivatives of \eqref{eq:int:BVP} on a
+piecewise equidistant mesh, known as a \textit{Shihskin mesh}, which
+decomposes the domain into subregions with different resolutions; typically
+allowing to emphasize computational attention in the region of interest inside
+of the boundary layers present in each particular problem; see e.g., \cite{Sty13}. A general overview
+of these types of problems, their difficulties and solution approaches can be
+found, e.g., in the excellent survey article~\cite{Sty05}.
+
+The decomposition of the domain into various subregions, caused by the use of a
+Shishkin mesh to discretize the domain, is reflected on the resulting
+discretized convection-diffusion operators~$\A$, by exhibiting a particular
+block sparse structure. Consequently, the property of block-sparsity in the
+entries of the operator suggests the implementation of iterative solution
+methods when solving linear systems of the form \eqref{eq:int:linsys} with such
+coefficient matrices \cite{Saa03}. In particular, the use of domain decomposition methods
+like the multiplicative Schwarz method seems to be a natural choice of solution
+approach for these problems and, indeed, its efficiency is corroborated by
+numerical experiments (see Figures~\ref{fig:1D:MSM.N198.eps8}-\ref{fig:1D:MSM.N10002.eps4} which show the convergence of the multiplicative
+Schwarz method and compare them to Figures~\ref{fig:back:GMRES.N198.eps4}--\ref{fig:back:GMRES.N198.eps4} which show the convergence of the
+unpreconditioned GMRES method). Most of the work presented in this thesis will
+concern with the analysis of the multiplicative Schwarz method for solving
+systems of type \eqref{eq:int:linsys} coming from one- and two-dimensional
+finite difference discretizations of problems of type~\eqref{eq:int:BVP}.
+
+\medskip
+
+The (algebraic) multiplicative Schwarz method, which is often
+called the alternating Schwarz method (see~\cite{Gan08} for a historical
+survey), is a stationary iterative method for solving large
+and sparse linear algebraic systems of the form \eqref{eq:int:linsys}. In each
+step of the method, the current iterate is multiplied by
+an iteration matrix that is the  product of several factors, where each factor
+corresponds an inversion of only  a restricted part of the matrix. In the
+context of interest of this thesis, i.e., the numerical solution of discretized
+convection-diffusion problems, the restrictions of the matrix correspond to
+different parts of the computational domain subdivided by the Shishkin
+mesh. This motivates the name ``local solve'', which is a popular term used to
+describe each of these factors and is also used in a purely algebraic setting.
+The method is for the most part used as a preconditioner for a Krylov subspace
+method such as GMRES and many of its convergence results have been presented in
+that context; see, e.g., the treatment in the books~\cite{DolJolNat15, TosWid05}, and many references therein. When the method is considered from an
+algebraic point of view, as we do in this work, it is commonly treated as a s
+solution method; see, e.g., \cite{BenFroNabSzy01}. The convergence theory for
+the multiplicative Schwarz method is well established for important matrix
+classes including symmetric positive definite matrices and nonsingular
+$M$-matrices~\cite{BenFroNabSzy01}, symmetric indefinite
+matrices~\cite{FroNabSzy08,FroSzy14}, and $H$-matrices~\cite{BruPedSzy04}. The
+derivation of convergence results for these matrix classes is usually based on
+splittings of $\A$ and no systematic convergence theory exists however for
+general nonsymmetric matrices.
+
+Several authors have previously applied the alternating (or multiplicative)
+Schwarz method to the continuous problem \eqref{eq:int:BVP} based on the
+partitioning of the domain into overlapping subdomains, and subsequently
+discretized by introducing uniform meshes on each subdomain; see,
+e.g.,~\cite{FarHegMilOriShi00, FarShi00, MacMilOriShi00, MacMilOriShi01,MacOriShi00, MacOriShi02,MilOriShi96}.
+However, as clearly explained in~\cite{MacOriShi02}, significant numerical
+problems including very slow convergence and accumulation of errors (up to the
+point of non-convergence of the numerical solution) can occur when
+layer-resolving mesh transition points are used in this setup. These problems
+are avoided in our approach, since we first discretize and then apply
+the multiplicative Schwarz method to the linear algebraic system. To the best
+of our knowledge, this approach has not been studied in the literature so far.
+
+For problems in one spacial dimension, studied in Chapter~\ref{ch:1D}, the
+structure of the coefficient matrices exhibits a tridiagonal structure and the
+main mathematical tool used in our analysis exploits the fact that such
+discrete operators are \emph{diagonally dominant}. For problems in higher spatial dimensions, studied
+in Chapter~\ref{ch:2D}, the discretized operator exhibits a block tridiagonal
+structure. In order to perform an analysis analogous to the one-dimensional
+case, we generalize the property of diagonal dominance from the scalar case to
+the case where the matrices possess a block structure and develop a new
+mathematical theory of \emph{block diagonal dominant} matrices. The theory is
+presented in Chapter~\ref{ch:BDiDo} and it is general enough that it can be
+applied to any matrix with a block structure, however it seems to be
+particularly useful for matrices coming from discretizations of PDEs.
+
+As mentioned before, the system matrices we study in this work are
+nonsymmetric,  nonnormal, ill-conditioned, and in particular not in one of the
+classes considered in~\cite{BenFroNabSzy01,BruPedSzy04,FroNabSzy08,FroSzy14}.
+Moreover, our derivations are not based on matrix splittings, but on the
+off-diagonal decay of the matrix inverses, which in turn is implied by diagonal
+dominance. From a broader point of view our results show why a convergence
+theory for the multiplicative Schwarz method for ``general'' matrices will most
+likely remain elusive: Even in the simple model problem considered
+in Chapter~\ref{ch:1D} and in \cite{EchLieSzyTic18}, the convergence of the
+method strongly depends on the problem parameters and on the chosen
+discretization, and while the method rapidly converges in some cases, it
+diverges in others.
+
+\section{Scope and Goals}
+The scope of this thesis aims to provide an analysis of the convergence
+behavior of the multiplicative Schwarz method when it is used to solve linear
+systems arising from special finite difference discretizations of singularly
+perturbed convection-diffusion problems posed on a Shishkin mesh. We restrict our attention to the cases where the domain $\Omega$ is one- or
+two-dimensional, and we analyze the method both as an algebraic solution
+approach as well as a preconditioner for the GMRES method.
+
+The analysis presented in this work brings an understanding on why this
+solution technique is so effective for solving problems arising from the
+Shishkin mesh discretizations. We do this by providing convergence bounds for
+the norm of the error generated by the method at each iteration step.
+Moreover, the convergence bounds provided in this thesis, in the paper
+\cite{EchLieNab18}, and in the manuscript \cite{EchLieTic19}, shed light on
+an apparent contradiction: If the continuous problem becomes more difficult
+(a smaller diffusion coefficient is chosen), then the convergence of the
+multiplicative~Schwarz method for the discretized problem becomes faster.
+
+The mathematical tools developed in this work to achieve its main goal are,
+however, more general. The theory of block diagonal dominance of matrices
+presented in Chapter~\ref{ch:BDiDo}, with the bounds and eigenvalue inclusion
+sets resulting from our analysis, does not only apply to operators coming
+from discretizations of BVPs but is applicable to any matrix
+$\A\in\mathbb{C}^{N\times N}$ with a block structure.
+
+% In short, the main questions that this thesis aims to answer are:
+% %\td{\textbf{write}: reformulate main questions of this thesis}
+%
+% \begin{itemize}
+% \item[•] How does the \emph{error} of the multiplicative Schwarz method
+% behave when solving linear systems \eqref{eq:int:linsys} coming from finite
+% difference discretizations of singularly perturbed convection-diffusion
+% problems of the form \eqref{eq:int:BVP} in conjunction with the use of
+% appropriate Shishkin fitted meshes?
+% % \end{itemize}
+% %
+% % \begin{itemize}
+% \item[•] How does the \emph{residual} of the GMRES method behave when solving
+% linear systems \eqref{eq:int:linsys} coming from finite difference
+% discretizations of singularly perturbed convection-diffusion problems of the
+% form \eqref{eq:int:BVP} in conjunction with the use of appropriate Shishkin
+% fitted meshes, when the multiplicative Schwarz method is used as a
+% preconditioner?
+% \end{itemize}
+%
+% The solution of discretized convection diffusion problems is typically
+% reformulated into inverting nonsymmetric nonnormal matrices. Thus,
+% mathematically, we are trying to answer the more general question:
+% how does the multiplicative Schwarz method (as an algebraic solution approach
+% and as a preconditioner for GMRES) behave when it is used to solve linear
+% systems with nonsymmetric nonnormal matrices with a special block structure?
+% In order to give an answer to these questions, will adhere to the following
+% guidelines:
+% %
+% \begin{itemize}
+% \item[•]
+% Given that there is no general theory to treat all nonsymmetric
+% nonnormal matrices and all iterative numerical methods, we focus on the
+% matrices arising from a simple one-dimensional model problem.
+% %\td{\textbf{note}: see comment in reference [39] of Liesen \& Strako{\^ s}: block splittings and CG}
+%
+% \item[•] Using the problem specific results obtained in the one-dimensional
+% model problem (exploiting the structure of the discrete operators),
+% we develop general theoretical tools (theory of block diagonal dominance of
+% matrices) which allow for the generalization of the results to prove and
+% describe the convergence behavior of the iterative method in higher
+% dimensional cases.
+%
+% \item[•]  Once the specific one-dimensional case is analytically proven, we use
+% the generalizability of model problems and the newly developed tools to answer
+% the questions for higher dimensional cases; see for example the interesting
+% discussion about the nature of model problems in~\cite{KraParSte83}.
+% \end{itemize}
+
+\section{Outline and Summary of Main Results}
+
+We begin by introducing a short review of the theoretical background material
+needed to understand the results presented in this thesis in
+Chapter~\ref{ch:back}. An experienced reader in these topics, might use this
+chapter for reference and directly visit Chapters~\ref{ch:1D}~--~\ref{ch:2D} which encompass the main findings of this thesis: results for
+one-dimensional model problems, results for general matrices, and results for
+two-dimensional model problems. Finally, Chapter~\ref{ch:end} provides a
+brief discussion and outlook on possible continuations of this work. The
+appendix \ref{ch:matlab} provides instructions for obtaining the computational
+code in order to perform and reproduce the numerical experiments presented
+throughout this thesis. In the following we provide a brief summary of the
+results obtained in each of the main chapters of this thesis:
+% As mentioned above, the main findings of this thesis are subdivided into
+% the three chapters:
+%\td{\textbf{write}: summary of the main findings of this work is still missing.}
+% \begin{itemize}
+%
+% \item[•]
+\paragraph{Chapter~\ref{ch:1D}:} In this chapter, we analyze the
+convergence of the multiplicative Schwarz method applied to nonsymmetric linear
+algebraic systems obtained from discretizations of one-dimensional singularly
+perturbed convection-diffusion equations by upwind and central finite
+differences on a Shishkin mesh. Using the algebraic structure of the Schwarz
+iteration matrices we derive bounds on the infinity norm of the error that are
+valid from the first step of the iteration. Our bounds for the upwind scheme
+prove rapid convergence of the multiplicative Schwarz method for all relevant
+choices of parameters in the problem. The analysis for the central difference
+is more complicated, since the submatrices that occur are nonsymmetric and
+sometimes even fail to be $M$-matrices. Our bounds still prove the convergence
+of the method for certain parameter choices.
+
+\paragraph{Chapter~\ref{ch:BDiDo}:} Here we generalize the bounds
+on the inverses of diagonally dominant matrices obtained in~\cite{Nabben99}
+from scalar to block tridiagonal matrices. Our derivations are based on a
+generalization of the classical condition of block diagonal dominance of
+matrices given by Feingold and Varga in~\cite{FeiVar62}. Based on this
+generalization, which was recently presented in \cite{EchLieNab18} and a
+similar definition appearing first in \cite{BenEvaHamLupSla17}, we also derive
+a variant of the Gershgorin Circle Theorem for general block matrices which can
+provide tighter spectral inclusion regions than those obtained by Feingold and
+Varga.
+
+\paragraph{Chapter~\ref{ch:2D}:} Finally, we analyze the convergence
+of the multiplicative Schwarz method applied to linear algebraic systems with
+matrices having a special block structure that arises, for example, when a
+partial differential equation is posed and discretized on a domain that
+consists of two subdomains with an overlap. This is a basic situation in the
+context of domain decomposition methods. Again, our analysis is based on the
+algebraic  structure of the Schwarz iteration matrices, and we derive error
+bounds that are based on the block diagonal dominance of the given system
+matrix. Our analysis does not assume that the system matrix is symmetric
+(positive definite), or has the $M$- or $H$-matrix property. Our approach in
+this chapter significantly generalizes the analysis for a special
+one-dimensional model problem treated in Chapter~\ref{ch:1D}.
+% \end{itemize}
+
+% Here we analyze the convergence of the multiplicative Schwarz method for
+% linear algebraic systems with matrices of the form
+% %
+% \begin{equation}\label{eq:blockmat}
+% \mathcal{A}=\left[
+%   \begin{array}{ccc}
+%              \matAHhat       & e_{m}\otimes \matBH   &    0            \\
+%     e_{m}^{\Tr}\otimes \matC  &   A      & e_{1}^{\Tr}\otimes \matB \\
+%                    0         & e_{1}\otimes\matCh &        \matAhhat  \\
+%   \end{array}
+% \right]\;\in\;\R^{N(2m+1)\times N(2m+1)},
+% \end{equation}
+% %
+% with $\matAHhat, \matAhhat \in \R^{Nm\times Nm}$,
+% $\matA, \matB, \matC, \matBH, \matCh \in \R^{N\times N}$, and
+% the canonical basis vectors $e_1,e_m\in\R^{m}$. We will usually think of
+% $\matAHhat, \matAhhat \in \R^{Nm\times Nm}$ as matrices consisting of $m$
+% blocks of size $N\times N$. After deriving general expressions for the norms
+% of the multiplicative Schwarz iteration matrices for systems of the form
+% \eqref{eq:linsys}--\eqref{eq:blockmat}, we derive actual error bounds only for
+% the case when the blocks $\matAHhat$ and $\matAhhat$ of ${\cal A}$ are block
+% tridiagonal.
+%
+% Such matrices arise naturally when a differential equation is posed and
+% discretized inside a domain $\Omega$ that is divided into two subdomains
+% $\Omega_1$ and $\Omega_2$ with an overlap. In this context the first $m+1$
+% block rows in the matrix $\mathcal{A}$ correspond to the unknowns in the
+% domain $\Omega_1$, the last $m+1$ block rows correspond to the unknowns in
+% the domain $\Omega_2$, and the middle block row corresponds to the unknowns
+% in the overlap. The underlying assumption here is that in each of the two
+% subdomains we have the same number of unknowns. This assumption is made for
+% simplicity of our exposition. Extensions to other block sizes are possible,
+% but would require even more technicalities; see our discussion in
+% Section~\ref{sec:conclusions}.
+
+% \section{Content Outline}
+
+
+\fi % end of if statement regarding content shown

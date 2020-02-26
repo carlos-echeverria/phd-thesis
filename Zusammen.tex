@@ -1,0 +1,17 @@
+\begin{changemargin}{-0.35cm}{-0.35cm}
+\noindent Bestimmte Approximationstechniken für die numerische Lösung partieller Differentialgleichungen führen zu linearen algebraischen Systemen, bei denen die Koeffizientenmatrix nicht symmetrisch, nicht normal und schlecht konditioniert ist. Dies ist der Fall zum Beispiel bei der Diskretisierung der Konvektions-Diffusions-Gleichung, die in dieser Arbeit auf einem  Shishkin-gitter aufgestellt wurde. Wir stellen eine Konvergenzanalyse der (algebraischen) multiplikativen Schwarz-Methode vor, wenn sie zur Lösung linearer Systeme verwendet wird, die sich sowohl aus dem Upwind als auch aus dem zentralen Finite-Differenz-Diskretisierungsansatz für solche Probleme ergeben. Für ein- und zweidimensionale Probleme zeigen wir, dass die Iterationsmatrix der Methode einen niedrigen Rang hat, was uns erlaubt, ihre $\infty$-Norm abzuschätzen. Diese Schranken führen zu quantitativen Fehlerschranke für die Iterationen der Methode, die ab dem ersten Schritt des Iterationsprozesses gültig sind. Bei eindimensionalen Problemen beweisen wir eine schnelle Konvergenz der Methode für alle Parameterwahlen des Problems, wenn der Upwind-Diskretisierungsansatz verwendet wird, während die Konvergenz nur für bestimmte Parameterwahlen für den zentralen Differenzansatz nachgewiesen werden kann. Bei zweidimensionalen Problemen wird nur die Upwind-Diskretisierung berücksichtigt.
+Darüber hinaus betrachten wir die Methode als Vorkonditionierer von GMRES und weisen die Konvergenz der vorkonditionierten Methode in wenigen Schritten nach, wenn die lokalen Teilbereichsprobleme exakt gelöst werden. Numerische Experimente zeigen, dass bei zweidimensionalen Problemen die Anzahl der Iterationen entweder gleich bleibt oder bei ungenauen lokalen Lösungen abnimmt, wodurch eine Beschleunigung der Rechenzeit erreicht wird.
+Wir fahren fort, indem wir unsere Konvergenzergebnisse auf den Fall verallgemeinern, dass die Koeffizientenmatrix des linearen Systems eine spezielle Blockstruktur besitzt, die sich z.B. ergibt, wenn eine partielle Differentialgleichung auf einem Gebiet gestellt und diskretisiert wird, die aus zwei Untergebiete besteht, die sich überlappen. Unsere Analyse geht nicht davon aus, dass die aus dem Diskretisierungsprozess resultierenden Systemmatrizen symmetrisch (positiv definit) sind oder die Eigenschaft der $M$- oder $H$-Matrix besitzen. Stattdessen erhalten wir unsere Ergebnisse durch Verallgemeinerung der Theorie der diagonaldominanten Matrizen vom skalaren zum Blockfall. Basierend auf dieser Verallgemeinerung beschränken wir die Norm der Inversen von allgemeinen Blocktridiagonalmatrizen und leiten eine Variante des Satz von Gershgorin her. Die Eigenwert-Einschlussbereiche in der komplexen Ebene liefert, die potenziell kleiner sind als die klassischen Gershgorin-Kreise.
+
+\medskip
+
+\begin{center}
+\ccbyncsa\\
+\footnotesize
+Dieses Werk ist unter der Creative Commons Attribution-NonCommercial-ShareAlike
+4.0 \\ internationale Lizenz. Um eine Kopie dieser Lizenz zu sehen, besuchen Sie:
+\url{https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en_US}.
+\end{center}
+\end{changemargin}
+
+\afterpage{\blankpage}

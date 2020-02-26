@@ -1,0 +1,183 @@
+\ifnum\switch=1
+% -----------------------------------------------------------------------------
+% ------------------------------ Extended ToC ---------------------------------
+% -----------------------------------------------------------------------------
+
+This chapter is based on the following references: \cite{EchLieNab18, EchLieSzyTic18, EchLieTic19}.
+
+
+\else
+% -----------------------------------------------------------------------------
+% --------------------------- Content of Chapter ------------------------------
+% -----------------------------------------------------------------------------
+Motivated by the challenge of understanding and analyzing the convergence of
+the multiplicative Schwarz method for solving linear algebraic systems arising
+from a ``simple'' and problem-specific one-dimensional model problem, various
+results and contributions presented in this thesis are valid in a much broader
+and general context. This concluding section provides a very brief discussion
+on the consequences brought forth by the main results found in this
+work and points out possibilities for further investigations that naturally
+arise from the analysis and experiments present in this thesis.
+
+% several contributions have been made to the mathematical theory
+% as well  of the solution discretized
+% convection-diffusion problems. Starting in Chapter~\ref{ch:1D}, we provide a
+% convergence analysis of the multiplicative Schwarz method when used to solve
+% one-dimensional problems. Motivated by the mathematical tools used to analyze
+% such problems, we present the theory of block diagonal dominant matrices in
+% Chapter~\ref{ch:BDiDo}. Finally, in Chapter~\ref{ch:2D}, we use the newly
+% developed theory to analyze the convergence of the method for a general class
+% of matrices whcih often appears in the discretization of second-order partial
+% differential equations.
+
+\medskip
+
+In the context of Schwarz solution methods, our main contributions include
+expressions for the convergence factor of the multiplicative Schwarz method
+when used to solve linear algebraic systems with a special block structure arising from problems in one- and two-dimensions (see Corollary~\ref{cor:1D:rank.one} and
+Lemma~\ref{lem:2D:genbounds}). The specific structure present in the
+coefficient matrix is brought about when the finite difference or the finite
+element method are used to discretize any second-order constant-coefficient elliptic partial differential equation which is posed on a very broad
+and common domain decomposition context: that of a domain being subdivided into
+two smaller subdomains with an overlap between them.
+By making further assumptions on the system matrix, mainly that it
+possesses a block-tridiagonal structure, we provide quantitative convergence
+bounds for the error of the method in terms of the norms of the off-diagonal
+blocks of the original system matrix (see Theorems~\ref{thm:2D:main} and
+\ref{thm:2D:main2}). The provided bounds are valid from the first step of the
+iteration process, presenting a grand improvement in contrast with the classic
+convergence theory for multiplicative Schwarz methods, which is based on
+asymptotic convergence rates and is not able to describe the transient phase of
+the iteration scheme, where most problems like stagnation of the method might
+occur. Furthermore, our analysis does not lean on any of the usual assumptions
+put on the matrices needed to prove convergence in the classical domain
+decomposition convergence theory, such as symmetry, or the $M$- or $H$-matrix
+properties, making our approach much more general in its range of applications.
+
+Contributions to the general area of preconditioning are also present in this
+work. Results on the convergence theory of the preconditioned GMRES method,
+given in the form of bounds on the residual norm of the iterates of the method,
+are provided for the case when the multiplicative Schwarz method is used as a
+preconditioner. The bounds are given in terms of the rank of the iteration
+matrix of the multiplicative Schwarz method, which in the domain decomposition
+context, we have proven to be of low-rank (see Lemma~\ref{lem:2D:powers}).
+Moreover this result might be extended to the case when other fixed point
+iteration methods are used as preconditioners in particular scenarios, since
+the convergence of the GMRES method in a small number of steps is only
+linked to the low rank structure of the iteration matrix of the method. In the
+specific case presented in this thesis, bounding the rank of the iteration
+matrix of the multiplicative Schwarz method allows us to prove rapid
+convergence of the preconditioned GMRES method, an approach that can be useful
+whenever the iteration matrices of other fixed point iteration methods posses a
+low rank structure.
+
+The specific domain decomposition setting used to present our theory, which
+mimics the one fist studied by Schwarz at the end of the 19th century and
+consists of only two overlapping subdomains, reduces the technicalities present
+in the analysis needed to obtain the results, nevertheless, the arguments used
+to construct the convergence theory can be applied in a recursive fashion. It is
+easy to imagine each of the subdomains being subdivided once again into two
+smaller subdomains and for this process to be repeated until a desired
+finite number of subdivisions is reached in each of the original subdomains.
+This, of course, has immediate potential in the implementation of the method for
+parallel computing systems when a low memory storage prevents the modeling of
+large domains in a single computing station.
+
+In the specific case where the multiplicative Schwarz method is used to solve
+systems coming from discretizations of the the convection-diffusion equation we
+have shown that the approach of using a one- or two-dimensional Shishkin mesh
+together with a finite difference approximation of the derivatives is very
+effective in terms of the number of iterations that the method needs to
+converge to an accurate solution, since in this context the iteration matrix
+has low rank. Not only that, but our analysis clarifies an apparent
+contradiction in the behavior of the method when used to solve these type of
+problems, where we observe that  as the problem becomes harder
+(we choose a smaller perturbation parameter) the convergence of the
+multiplicative Schwarz method becomes faster and more effective
+(see Theorems~\ref{thm:1D:upwind_conv} and \ref{thm:1D:central_conv} and
+Corollary~\ref{cor:2D:conv-diff}). The effectivity of the bounds was
+illustrated numerically on one- and two-dimensional convection-diffusion model
+problems, showing that the bounds are extremely close to the actual errors
+produced by the method in both cases, becoming more accurate as the problems
+become more convection dominated.
+
+The most general results presented in this work fall under the broad
+study area of linear algebra and include a generalization of the
+classical definition of block diagonal dominance of matrices given by Feingold
+and Varga in~\cite{FeiVar62} (note that a very similar definition to the one
+presented in this thesis appeared on the same year in
+\cite{BenEvaHamLupSla17}), which brings new understanding of the concept of
+diagonal dominance when dealing with operators with a block structure (see Definitions~\ref{def:BDiDo:bdd} and \ref{def:App:colbdd}). In the
+classical definitions of block diagonal dominance, the blocks are ``treated as scalars'', however in our approach the block diagonal dominance is based on the
+influence of the blocks as matrices, i.e., the action of the block is taken
+into account not just their norms. This new definition and its consequences
+have proven to be useful tools in the analysis of the multiplicative Schwarz
+method and might very well be useful in analyzing other iterative methods,
+specially in the context of fixed point iteration methods. Moreover, the generalization of block diagonal dominance provided in
+this work implies new results in the spectral theory of eigenvalues, for
+example, it infers new eigenvalues inclusion sets for general block matrices
+which are potentially tighter that the classical ones given by the previous
+definitions of diagonal dominance or the Gershgorin's Circle Theorem (see
+Corollary~\ref{cor:BDiDo:inclusion}).
+
+Furthermore, based on our definition we established upper and lower bounds and
+decay rates on the block norms of the inverse of block diagonally dominant
+block tridiagonal matrices (see Theorems~\ref{thm:BDiDo:blockbounds} and
+\ref{thm:BDiDo:iterblockbounds} and Corollary~\ref{cor:BDiDo:decay}), which are
+a direct generalization of the bounds presented in \cite{Nabben99} for the
+scalar case. The bounds may be extremely useful for the creation of
+preconditioners for large linear systems when the system matrices are block
+tridiagonal. The off-diagonal decay of the block norms of its inverse matrix
+implied by the bounds allows for the creation of approximate inverses by
+neglecting blocks that fall bellow a desired norm threshold.
+
+\medskip
+
+Although the results provided in this thesis focus on the study and
+generalization of simple model problems, natural extensions of our approach to
+more general settings are still possible. We will now briefly mention a number
+of generalizations and alternative applications to our analysis that may be
+explored in future research.
+
+Our analysis stems from on a very specific domain decomposition problem setting
+which translates into solving linear systems with coefficient matrices
+exhibiting a specific block structure. The problem setting which was chosen is
+the simplest one possible and the main assumption that guided our analysis was
+the fact that in each of the two local subdomains, we use the same number of
+unknowns. This assumption was helpful in reducing technicalities present in our
+analysis, however, by relaxing this and other different constraints, we can
+envision the same approach being applied to matrices $\A$ with more general
+structures.
+
+It would be only natural to apply our approach in a setting where the local
+subdomains have a different number of unknowns. This would be reflected in a
+coefficient matrix $\A$ with blocks $\matAHhat$ and $\matAhhat$ of variable
+size in \eqref{eq:2D:blockmat}. An analysis of the problem in this more general
+context would be filled with more technicalities, however it would be certainly
+possible to carry out, specially when the sizes of the matrices are multiples
+of $N$, i.e. for matrices $\matAHhat\in\mathbb{R}^{Ns\times Ns}$ and
+$\matAhhat\in\mathbb{R}^{Nt\times Nt}$. It is also easy to think of applying our
+analysis to the solution of discretized of PDEs with variable coefficients.
+This change would be reflected in the structure of the matrices $\matAHhat$ and
+$\matAhhat$ by exhibiting general tridiagonal blocks of the form
+\begin{equation}\label{eqn:tridiaggeneral}
+\matAHhat=\mathrm{tridiag}(C_{\klein{H},i},A_{\klein{H},i},B_{\klein{H},i})
+\quad\text{and}\quad
+\matAhhat=\mathrm{tridiag}(C_{\klein{h},i},A_{\klein{h},i},B_{\klein{h},i}),
+\end{equation}
+instead of tridiagonal Toeplitz matrices of the form \eqref{eq:2D:tridiag}. The
+analysis would still be possible since the theory of block diagonal dominance presented in Chapter~\ref{ch:BDiDo} used to obtain the
+bounds allows for relaxing this constraint. A generalization of
+\ref{thm:2D:main2} to $\A$ with blocks \eqref{eqn:tridiaggeneral} would require
+that the conditions \eqref{eq:2D:dominant} hold in every block row, and then
+analogously to \eqref{eq:2D:etah}--\eqref{eq:2D:etaH}, every block row in
+$\matAHhat$ or $\matAhhat$ would give a parameter $\eta_{H,i}$
+or $\eta_{h,i}$, respectively. For convection-diffusion problems, the structure of the matrix would also be affected by the number of boundary layers present in the problem. We would have more than one overlap region in the domain and the iteration matrixes would present different more complicated nonzero block structures affecting the rank of the iteration matrix. However, preliminary numerical experiments show that the iteration matrices still possess a low numerical rank (close to $N$). Thus, we believe that it is still analyzable
+along the lines of Section~\ref{2D:bounds:structure}.
+
+% \medskip
+%
+% The author believes that the analysis presented in this thesis opens up the possibility of developing a general convergence theory of fixed point iteration methods based on the structure of the system matrices where a systematic analysis of different structures leading to various convergence results. Going even further, this new theory could be extended, like it is done in this work, to the convergence of GMRES when a general fixed point iteration method is used as a preconditioner.
+
+
+\fi

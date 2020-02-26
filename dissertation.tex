@@ -1,0 +1,155 @@
+% !TEX root = dissertation.tex
+\RequirePackage{pdf14} % use pdf1.4 (for pdf/a compatibility)
+\documentclass[
+  %oneside,
+  twoside,
+  BCOR=12mm,
+  openany,
+  %leqno
+]{scrbook} % remove draft option to show pgf plots
+
+% -----------------------------------------------------------------------------
+
+\input{Preamble.tex}
+
+% -----------------------------------------------------------------------------
+
+\newcount\switch
+\switch=2
+% \switch=1 - Extended ToC
+% \switch=2 - Everything except acknowledgements is shown (see Ack.tex)
+% \switch=3 - Everything is shown
+
+% -----------------------------------------------------------------------------
+
+\begin{document}
+
+\pagenumbering{alph}
+\input{TitlePage.tex}
+
+\frontmatter
+\pagenumbering{roman}
+
+% \ifnum\switch=2
+\chapter*{}
+\thispagestyle{empty}
+\vspace*{5cm}
+\hfill \emph{To the memory of my father, and to my mother, who is pure life}
+\afterpage{\blankpage}
+
+
+\chapter*{Abstract}
+\input{Abstract.tex}
+
+\chapter*{Zusammenfassung}
+\input{Zusammen.tex}
+
+\chapter*{Acknowledgements}
+\input{Acknowledgements.tex}
+% \fi
+
+
+\tableofcontents
+\mainmatter
+\pagenumbering{arabic}
+
+\ifnum\switch=2
+% \addchap{Notation}
+% \label{ch:notation}
+% \input{Notation.tex}
+% \todototoc
+% \listoftodos
+\fi
+
+\chapter{Introduction}
+\label{ch:intro}
+\input{Introduction.tex}
+
+\setchapterpreamble[uc][.9\textwidth]{%
+\dictum[K. W. Morton, \textit{Numerical Solution of Convection-Diffusion Problems} \cite{Mor96}]{%
+``Accurate modelling of the interaction between convective and diffusive processes is the most ubiquitous and challenging task in numerical approximation of partial differential equations.''}\vskip1em}
+\chapter{Background Material}
+\label{ch:back}
+\input{Background.tex}
+
+%\chapter{Solution of Discretized 1D Convection-Diffusion Problems}
+\chapter{Convergence of the Multiplicative Schwarz Method for Shihskin Mesh Discretizations of One-dimensional Convection-Diffusion Problems}
+\chaptermark{Convergence of the Multiplicative Schwarz Method for 1D Shihskin Problems}
+\label{ch:1D}
+\input{1Dproblems.tex}
+
+%\addtocontents{toc}{\protect\newpage}%forces pagebreak in ToC
+\chapter{The Theory of Block Diagonal Dominant Matrices}
+\label{ch:BDiDo}
+\input{BDiDo.tex}
+
+%\chapter{Solution of Discretized 2D Convection-Diffusion Problems Posed on a Shihskin Mesh}
+\chapter{Convergence of the Multiplicative Schwarz Method for Shihskin Mesh Discretizations of Two-dimensional Convection-Diffusion Problems}
+\chaptermark{Convergence of the Multiplicative Schwarz Method for 2D Shihskin Problems}
+\label{ch:2D}
+\input{2Dproblems.tex}
+
+\chapter{Discussion and Outlook}
+\label{ch:end}
+\input{Discussion.tex}
+
+\ifnum\switch=2
+\appendix
+
+% \chapter{Miscelaneous Results and Definitions}
+% \label{ch:LinAlg}
+% \input{LinAlg.tex}
+
+\chapter{Documentation of the Software}
+\label{ch:matlab}
+All numerical experiments presented in this thesis
+% were computed on a 13-inch \texttt{Apple MacBook} computer model Mid 2010 with a 2,4 GHz Intel Core 2 Duo processor equipped with \texttt{MATLAB} version R2015b. The experiments
+can be reproduced with the freely available software developed by the author specifically for this work. The \LaTeX~source code used to compile this document as well as the \texttt{MATLAB} \texttt{m}-files to run the numerical experiments can be obtained from the \texttt{GitHub} repository found in:
+
+\begin{center}\url{https://github.com/carlos-echeverria/phd-thesis} \end{center}
+
+\noindent To reproduce the figures and tables please refer to the following guidelines. All \texttt{m}-files are individually documented; see the header of each file for in-detail information.
+\begin{itemize}
+\item To reproduce Figures~\ref{fig:back:GMRES.N198.eps4}--\ref{fig:back:GMRES.N198.eps8} use the script:\\
+\medskip
+\texttt{MATLAB\_CODE/CH3/produce\_figures\_gmres\_without\_preconditioning.m}
+\item To reproduce Figures~\ref{fig:1D:MSM.N198.eps8}--\ref{fig:1D:MSM.N198.eps4} use the script:\\
+\medskip
+\texttt{MATLAB\_CODE/CH3/produce\_figures\_mSm\_upwind\_and\_central.m}
+\item To reproduce Figures~\ref{fig:1D:MSM.N10002.eps8}--\ref{fig:1D:MSM.N10002.eps4} use the above mentioned script with the parameter \texttt{N} changed from \texttt{N=198} to \texttt{N=10002}.
+\item Table~\ref{tab:1D:rho} can be reproduced by choosing the corresponding value of the parameter \texttt{N} in the previous script and reading off the values in \texttt{MATLAB}'s console.
+\item To reproduce Figures~\ref{fig:1D:GMRES.N198.eps6.prec}--\ref{fig:1D:GMRES.N198.eps8.prec} use the script:\\
+\medskip
+\texttt{MATLAB\_CODE/CH3/produce\_figures\_gmres\_with\_preconditioning.m}
+\item To reproduce the images and tables from Examples~\ref{ex:BDiDo:symm}--\ref{ex:BDiDo:nonsym3} use the script:\\
+\medskip
+\texttt{MATLAB\_CODE/CH4/SCRIPT.m}\\
+The different examples can be computed by choosing the parameter \texttt{matA} from $1$ to $4$. The tables will be given as output to the console once the parameter \texttt{refinement\_step} is chosen to be $8$.
+\item To reproduce the images and tables from Examples~\ref{ex:BDiDo:inclusion}--\ref{ex:BDiDo:inclusionconvdiff3} use the script:\\
+\medskip
+\texttt{MATLAB\_CODE/CH4/SCRIPT\_INCLUSION\_SETS.m}\\
+The different examples can be computed by choosing the parameters \texttt{Achoice}, \texttt{N} and \texttt{M} accordingly (see header of $m$-files).
+\item To reproduce Figures~\ref{fig:2D:err1}--\ref{fig:2D:err2} use the script:\\
+\medskip
+\texttt{MATLAB\_CODE/CH5/produce\_figures\_2D\_mSm.m}
+\item To reproduce Figures~\ref{fig:2D:prec1}--\ref{fig:2D:prec4} use the script:\\
+\medskip
+\texttt{MATLAB\_CODE/CH5/produce\_figures\_2D\_gmres.m}
+\item To reproduce Table~\ref{tab:2D:rho} use the script:\\
+\medskip
+\texttt{MATLAB\_CODE/CH5/produce\_table\_2D\_rho\_upwind.m}\\
+The values of the table can then be read off \texttt{MATALB}'s console window.
+\item To reproduce Tables~\ref{tab:2D:GMRES.iter.inexact.prec} \ref{tab:2D:GMRES.time.inexact.prec} and \ref{tab:2D:GMRES.error.inexact.prec} as well as Figure~\ref{fig:2D:sol_comp} use the script:\\
+\medskip
+\texttt{MATLAB\_CODE/CH5/produce\_tables\_2D\_inexact\_upwind.m}\\
+The values of each table can then be read off \texttt{MATALB}'s console window.
+\end{itemize}
+
+\noindent \textsc{Warning}: since maintaining code is an ever evolving endeavor, the above guidelines might be outdated. As stated above, please refer to the header of each individual file for up-to-date information. If any errors, bugs, or typos are found in the provided source code, please make a pull request in the \texttt{Github} repository after fixing, or send an email to: \texttt{echeverriacarlos@gmail.com} describing the error/bug/typo. Thank you.
+%
+\fi
+
+\setlength{\emergencystretch}{0.7em}
+\printbibliography[heading=bibintoc]{}
+
+\end{document}

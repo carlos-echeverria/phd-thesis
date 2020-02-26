@@ -1,0 +1,40 @@
+
+Certain approximation techniques for the numerical solution of partial
+differential equations result in linear algebraic systems where the coefficient
+matrix is nonsymmetric, nonnormal and ill-conditioned. This is the case for the finite difference discretization of the convection-diffusion equation posed on a Shishkin mesh treated in this work. We present a convergence analysis of the (algebraic) multiplicative Schwarz method when it is used to solve linear systems arising from both the upwind and central finite difference discretization approaches to such problems. For one and two dimensional problems, we show that the iteration matrix of the method has
+low-rank, which allows us to bound its $\infty$-norm. These bounds lead to
+quantitative error bounds for the iterates of the method that
+are valid from the first step of the iteration process. For problems in
+one-dimension, we prove rapid convergence of the method for all parameter choices of the problem when the upwind discretization approach is used, while convergence can only be proven for certain parameter choices for the central difference approach.
+Only the upwind discretization is considered in the case of two-dimensional problems.
+Furthermore, we consider the method as a preconditioner to GMRES and prove the
+convergence of the preconditioned method in a small number of steps when the
+local subdomain problems are solved exactly. Numerical experiments show that,
+for problems in two-dimensions, the number of iterations either stays the same
+or decreases for the case of inexact local solves, achieving a speed up in
+computational time.
+We continue by generalizing our convergence results to the case
+where the coefficient matrix of the linear system possess a special block
+structure that arises, for example, when a partial differential equation is
+posed and discretized on a domain that consists of two subdomains that overlap.
+Our analysis does not assume that the system matrices resulting from the
+discretization process are symmetric (positive definite) or posses the $M$- or
+$H$-matrix property. Instead, our results are obtained by generalizing the
+theory of diagonal dominant matrices from the scalar to the block case.
+Based on this generalization we present bounds on the norms of the inverses of
+general block tridiagonal matrices and derive a variant of the Gershgorin
+Circle Theorem that provides eigenvalue inclusion regions in the complex plane
+that are potentially tighter than the usual sets derived from the classical
+definition.
+
+\vfill
+
+\begin{center}
+  \ccbyncsa\\
+  \footnotesize
+  This work is licensed under the Creative Commons
+  Attribution-NonCommercial-ShareAlike 4.0 International License. To view a copy of this
+  license, visit:
+  \url{https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en_US}.
+\end{center}
+\afterpage{\blankpage}

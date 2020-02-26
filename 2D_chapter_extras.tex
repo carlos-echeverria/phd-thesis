@@ -1,0 +1,492 @@
+%
+% Let the positve real number $J\geq 3$ represent the number of intervals used in
+% the homogenous mesh in the $x$-direction, and the even positive integer
+% $N\geq 4$ denote the number of mesh intervals used for the Shishkin mesh in
+% the $y$-direction. We define the transition parameter $\tau_y$, which will be
+% used to specify where the mesh changes from coarse to fine in, by
+% %
+% \begin{equation}\label{eq:tau}
+% \tau_y \equiv \min\left\{\frac12,2\frac{\epsilon}{\alpha_2}  \ln N\right\}.
+% \end{equation}
+% %
+% The assumption $\alpha_2\gg \epsilon$ (equivalently $\epsilon \leq CN^{-1}$)
+% leads to the value $\tau_y=2\frac{\epsilon}{\alpha_2}\ln N\ll 1$,
+% so that the \emph{mesh transition point} $1-\tau_y$ will be very close to $y=1$.
+% The use of this hybrid scheme will divide the domain $\Omega$ into two
+% overlapping subdomains, $\overline{\Omega}=\Omega_{1}\cup\Omega_{2}$, where
+% %
+% \[
+% \Omega_{1}=[0,1]\times[0,1-\tau_y],\quad\Omega_{2}=[0,1]\times[1-\tau_y,1],
+% \]
+% %
+% this subdivision is shown in the left side of Figure~\ref{fig:2Ddomain2}.
+% %
+% \begin{figure}[h!]
+% \hspace*{-2em}
+% \begin{minipage}[b]{0.5\textwidth}
+% \begin{center}
+% \begin{tikzpicture}[scale = 0.4]
+% %%%% Rectangle:
+% \draw (0,0) rectangle (10, 10);
+% %%%% horizontal lines and $y$
+% \node[left] at (0,10) {$1$};
+% \draw (0,8) node[left] {$1-\tau_y$} -- (10,8);
+% \node[left] at (0,0) {$0$};
+% \node[below] at (0,0) {$0$};
+% \node[below] at (10,0) {$1$};
+% %%%% Black dots:
+% \draw[black,fill=black] (0,8) circle (0.5ex);
+% %%%% Tile labels
+% \node at (5,4) {$\Omega_1$};
+% \node at (5,9) {$\Omega_2$};
+% \end{tikzpicture}
+% \end{center}
+% \end{minipage}
+% %
+% \hspace*{1em}
+% %
+% \begin{minipage}[b]{0.5\textwidth}
+% \begin{center}
+% \begin{tikzpicture}[scale = 0.4]
+% %%%% Rectangle:
+% \draw (0,0) rectangle (10, 10);
+%
+% %%%% horizontal lines and $y$
+% \foreach \point in {2,4,6,8,8.5,9,9.5}
+% \draw (0,\point) -- (10,\point);
+% \node[left] at (0,10) {$y_N$};
+% \node[left] at (0,8)  {$y_n$};
+% \node[left] at (0,0)  {$y_0$};
+%
+% %%%% vertical lines and $x$:
+% \foreach \point in {2,4,6,8}
+% \draw (\point,0) -- (\point,10);
+% \node[below] at (0,0) {$x_0$};
+% \node[below] at (10,0) {$x_J$};
+%
+% %%%% Black dots:
+% \draw[black,fill=black] (0,8) circle (0.5ex);
+% %%%% Tile labels
+% \draw (5,10) node[above] {$H_x$};
+% \draw (10,2.5) node[right] {$H_y$};
+% \draw (10,8.7) node[right] {$h_y$};
+% \end{tikzpicture}
+% \end{center}
+% \end{minipage}
+% %\includegraphics[width=0.9\linewidth]{figures/simpleShish2D3.pdf}
+% \caption{Division of the domain and Shishkin mesh for equation \eqref{eq:2D:bvp2}
+% with one outflow exponential layer.}
+% \label{fig:2Ddomain2}
+% \end{figure}
+%
+% Let $n\equiv \frac{N}{2}$, if we denote the mesh width in the $x$-direction
+% by $H_x$ and the mesh widths inside and outside the boundary layer in the
+% $y$-direction by $h_y$ and $H_y$, i.e.,
+% %
+% \begin{equation}\label{eq:nHh}
+% H_x:=\frac{1}{J},
+% \;\;\quad
+% h_y:=\frac{\tau_y}{n},
+% \;\;\quad\mbox{and}\;\;\quad
+% H_y:=\frac{( 1-\tau_y)}{n},
+% \end{equation}
+% then the nodes of the mesh
+% $
+% \{(x_i,y_j)\in\overline{\Omega}:i=0,\dots,J; j=0,\dots,N\}
+% $
+% are given by
+% %
+% \[x_i\equiv iH_x,
+% \quad \mbox{ and } \quad
+% y_j\equiv
+% \begin{cases} jH_y &\mbox{for}\;\; j=0,\ldots,n, \\
+% 1-(N-j)h_y &\mbox{for}\;\; j=n+1,\ldots,N. \end{cases}\]
+% %
+% %The mesh is constructed by drawing lines parallel to the coordinate axes
+% %through these mesh points; see the right side of Figure~\ref{fig:2Ddomain}.
+% Here $x_0=y_0=0$ and $x_J=y_N=1$ so that the mesh consists of $K=J-1$ interior
+% nodes in the $x$-direction and $M:=N-1$ interior nodes in the $y$-direction,
+% where the node $y_n$ is exactly at the transition point $1-\tau_y$.
+% It is clear that the mesh widths on $\Omega_{1}$ satisfy $1/J\leq H_x\leq 2/J$
+% and $1/N\leq H_y\leq 2/N$ so the mesh is coarse in this domain. On the other
+% hand, $h_y$ is $\mathscr{O}(\epsilon N^{-1}\log(N))$, so on $\Omega_2$ the mesh
+% is coarse in the $x$ direction and fine in the $y$ direction.  The ratio
+% between the different mesh sizes in the $y$ direction is
+% %
+% \[\frac{h_y}{H_y}=\frac{\tau_y}{1-\tau_y}=\tau_y+{\cal O}(\tau_y^2) \ll 1.\]
+
+% Using the standard upwind finite difference operators and the lexicographical
+% line ordering of the unknowns of the hybrid mesh, the finite difference scheme
+% yields a linear algebraic system $\A\u=\f$, \td{\textbf{fix}: change to the used
+% notation of our generic linear system} with a coefficient matrix $\A$ of the
+% form \eqref{eq:2D:blockmat} and where the submatrices $\matAHhat$ and
+% $\matAhhat$ have the block tridiagonal structure
+% \eqref{eq:2D:tridiag}.
+% The blocks in \eqref{eq:2D:tridiag} are of dimension $M\times M$ where
+% $M\equiv N-1$. The off-diagonal blocks are multiples of the identity matrix $\I\in{\mathbb R}^{M\times M}$,
+% $\C_H = d_H \I$, ${\C} = d \I$, $\C_h = d_h \I$,
+% $\B_H = e_H \I$, ${\B} = e \I$, $\B_h = e_h \I$,
+% where
+% \begin{align*}
+% 	&\entryvS  =  - \frac{\epsilon}{H_y^{2}}-\frac{\alpha_2}{H_y},&
+% 	&\entryzS  =  - \frac{2\epsilon}{H_y(H_y+h_y)}-\frac{\alpha_2}{H_y},&
+% 	&\entrywS  =  - \frac{\epsilon}{h_y^{2}}-\frac{\alpha_2}{h_y},\\
+%     &\entryvN  =  - \frac{\epsilon}{H_y^{2}},&
+%     &\entryzN  =  - \frac{2\epsilon}{h_y(H_y+h_y)},&
+%     &\entrywN  =  - \frac{\epsilon}{h_y^{2}}.
+% \end{align*}
+% and $\A_H=\text{tridiag}(\entryvW,\entryvC,\entryvE)$, ${\matA}=\text{tridiag}(\entryzW,\entryzC,\entryzE)$, $\A_h=\text{tridiag}(\entrywW,\entrywC,\entrywE)$, where
+% \begin{align*}
+% \hspace{-3em}
+%     &\entryvW  =  -\frac{\epsilon}{H_x^{2}},& % - \frac{\alpha_1}{H_x},&
+%     &\entryvC  =  \frac{2\epsilon}{H_x^{2}} +\frac{2\varepsilon}{H_y^{2}}
+% %    +\frac{\alpha_1}{H_x}
+%     +\frac{\alpha_2}{H_y}+\beta,
+%     &\entryvE  =  -\frac{\epsilon}{H_x^{2}},  \\
+%     &\entryzW  =  -\frac{\epsilon}{H_x^{2}} ,&
+% %    - \frac{\alpha_1}{H_x},&
+%     &\entryzC  =  \frac{2\epsilon}{H_x^{2}} +\frac{2\varepsilon}{H_yh_y}
+%     %+\frac{\alpha_1}{H_x}
+%     +\frac{\alpha_2}{H_y}+\beta,
+%     &\entryzE  =  -\frac{\epsilon}{H_x^{2}}, \label{eq:2D:upwind}\\
+%     &\entrywW  =  -\frac{\epsilon}{H_x^{2}},& %- \frac{\alpha_1}{H_x},&
+%     &\entrywC  =  \frac{2\epsilon}{H_x^{2}} +\frac{2\varepsilon}{h_y^{2}}
+%     %+\frac{\alpha_1}{H_x}
+%     +\frac{\alpha_2}{h_y}+\beta,
+%     &\entrywE  =  -\frac{\epsilon}{H_x^{2}}.
+% \end{align*}
+% Note that the off-diagonal entries are negative, and the diagonal entries $a_H$, $a$, $a_h$ are positive. Moreover,
+% $$
+% a_H + b_H + c_H + d_H + e_H
+% = a + b + c + d + e
+% = a_h + b_h + c_h + d_h + e_h = \beta \geq 0
+% $$
+%
+% Considering the matrix $\infty$-norm we will show that
+% the assumptions of Theorem~\ref{thm:2D:main2} are satisfied.
+% In more detail, we will prove that
+% $\A$ satisfies \eqref{eq:2D:dominant}, i.e., it is
+% row block diagonally dominant, and that
+% the matrices $\matAHhat$ and $\matAhhat$ satisfy the conditions
+% \eqref{eq:2D:dominant2}, i.e., they are column block diagonally dominant.
+% Since all considered blocks are nonsingular, Theorem~\ref{thm:2D:main2} can then be applied.
+%
+% To prove \eqref{eq:2D:dominant} and \eqref{eq:2D:dominant2} we just need to show that
+% \begin{equation}\label{eq:2D:shishkinblocks}
+%  |e_H+d_H| \|\matAH^{-1}\|_\infty \leq 1,\quad
+% |e+d| \|\matA^{-1}\|_\infty \leq 1,\quad
+% |e_h+d_h| \|\matAh^{-1}\|_\infty \leq 1,
+% \end{equation}
+% i.e., we need to bound the $\infty$-norms of matrices
+% $\matAH^{-1}$, $\matA^{-1}$, and $\matAh^{-1}$.
+%
+%
+% First realize
+% that for any \emph{nonsingular} matrix
+% $\mathscr{M}$ and an induced matrix norm it holds that
+% \[
+% \|\mathscr{M}^{-1}\|=\max_{\|v\|=1}\left\Vert \mathscr{M}^{-1}\left(\frac{\mathscr{M}v}{\|\mathscr{M}v\|}\right)\right\Vert =\frac{1}{\min_{\|v\|=1}\|\mathscr{M} v\|}.
+% \]
+% Therefore, if $\|\mathscr{M} v\|\geq\gamma>0$ for any unit norm vector $v$,
+% then $\|\mathscr{M}^{-1}\|\leq{\gamma^{-1}}$.
+%
+%
+% Second, suppose that $\mathscr{M}$ is a strictly diagonally dominant
+% tridiagonal Toeplitz matrix
+% $\mathscr{M}=\mathrm{tridiag}(\hat{c},\hat{a},\hat{b})$,
+% where $\hat{a}>0$, $\hat{b}<0$, $\hat{c}<0$, and
+% $
+% \hat{a}+\hat{b}+\hat{c}>0.
+% $
+% We would like to bound $\|\mathscr{M} v\|_{\infty}$ for any unit norm vector $v$
+% from below. If $\|v\|_{\infty}=1$, then there is an index $i$ such that
+% $|v_{i}|=1$. Without loss of generality we can assume that $v_{i}=1$, because
+% changing the sign of the vector does not change $\|\mathscr{M} v\|_{\infty}$.
+% Defining $v_{0}=0$ and $v_{n+1}=0$, it holds that
+% \[
+% \|\mathscr{M} v\|_{\infty}\geq|v_{i-1}\hat{c}+\hat{a}+v_{i+1}\hat{b}|\geq \hat{a}+\hat{b}+\hat{c}.
+% \]
+% Therefore
+% \begin{equation}\label{eq:2D:boundT}
+% \|\mathscr{M}^{-1}\|_{\infty}\leq\frac{1}{\hat{a}+\hat{b}+\hat{c}}.
+% \end{equation}
+%
+% To prove \eqref{eq:2D:shishkinblocks} we just apply the bound \eqref{eq:2D:boundT} to matrices $\matAH$, $\matA$, and $\matAh$. For $\matAH$ we get,
+% $$
+%     |e_H + d_H| \|\matAH^{-1}\|_\infty \leq \frac{|e_H + d_H|}{a_H+b_H+c_H}
+%     = \frac{|e_H + d_H|}{|e_H + d_H| + \beta} \leq 1,
+% $$
+% and the other inequalities in \eqref{eq:2D:shishkinblocks} follow analogously.
+%
+%
+% Hence, we can apply Theorem~\ref{thm:2D:main2}.  It holds that
+% $$
+% \eta_{h,\infty}^{\klein{\min}} = \min \left\{ \frac{|d_h| \|\matAh^{-1}\|_{\infty}}
+% {1-|e_h|\|\matAh^{-1}\|_{\infty}},  \frac{|d_h|\|\matAh^{-1}\|_{\infty}}
+% {1-|d_h|\|\matAh^{-1}\|_{\infty}} \right\} =  \frac{|d_h|\|\matAh^{-1}\|_{\infty}}
+% {1-|e_h|\|\matAh^{-1}\|_{\infty}} \leq 1,
+% $$
+% and
+% $$
+% \eta_{H,\infty}^{\klein{\min}}
+% = \min \left\{\frac{|e_H|\|\matAH^{-1}\|_{\infty}}{1-|d_H| \|\matAH^{-1}\|_{\infty}},
+% \frac{|e_H|\|\matAH^{-1}\|_{\infty} }{1-|e_H|\|\matAH^{-1}\|_{\infty}}\right\}
+% = \frac{|e_H|\|\matAH^{-1}\|_{\infty} }{1-|e_H|\|\matAH^{-1}\|_{\infty}}
+% \leq \left|\frac{e_H}{d_H}\right|.
+% $$
+% The convergence factor $\rho_{ij}$ can be bounded by
+% \begin{eqnarray*}
+% \left(\frac{\eta_{h,\infty}^{\klein{\min}} \|\matA^{-1}\matC\|_{\infty}}{1-\eta_{h,\infty}^{\klein{\min}}
+% \|\matA^{-1}\matB\|_{\infty}}\;
+% \frac{\eta_{H,\infty}^{\klein{\min}}\|\matA^{-1}\matB\|_{\infty}}{1-
+% \eta_{H,\infty}^{\klein{\min}}\|\matA^{-1}\matC\|_{\infty}}\right)
+% \leq \eta_{h,\infty}^{\klein{\min}}\eta_{H,\infty}^{\klein{\min}} \leq \left|\frac{e_H}{d_H}\right|
+% \end{eqnarray*}
+% and
+% $$
+% 	\| \T_{12} \| \leq
+% 	\eta_{H,\klein{\infty}} \leq
+% 	\left|\frac{e_H}{d_H}\right|,\qquad
+% 	\| \T_{21} \| \leq \eta_{h,\klein{\infty}}^{\klein{\min}} \leq 1\,.
+% $$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{The Model Problem and its Shishkin Mesh Discretization}
+% \label{2D:Problem}
+%
+% We consider the following convection-diffusion model problem with Dirichlet
+% boundary conditions,
+% %
+% \begin{equation}\label{eq:2D:bvp2}
+% -\epsilon  \Delta u + \alpha\cdot \nabla u+\beta u = f  \text{ in } \Omega=(0,1)\times(0,1),
+% \quad \quad
+% u=g\,\text{  on  }\, \Gamma=\partial\Omega.
+% \end{equation}
+% %
+% Here the scalar-valued function $u(x,y)$ represents the concentration of a
+% transported quantity, $\alpha(x,y)=[a_1(x,y),a_2(x,y)]^T$ the velocity field,
+% $\epsilon$ the scalar diffusion parameter, and $\beta$ the scalar reaction
+% parameter. We assume that on $\overline{\Omega}$ the components of the velocity
+% field are bounded, that is, $a_1(x,y)\geq\alpha_1>0$ and
+% $a_2(x,y)\geq\alpha_2>0$. Furthermore, we are interested in the
+% \textit{convection dominated} case, i.e., the case when
+% $\|\alpha\|\gg \epsilon >0$ in \eqref{eq:2D:bvp2}.
+% By making the assumptions that $\alpha$, $\beta$, and $f$ are sufficiently
+% smooth and that $\beta(x,y)-\frac{1}{2}\nabla \cdot \alpha(x,y)\geq C_0>0$ on
+% $\overline{\Omega}$ for some constant $C_0$, we ensure that \eqref{eq:2D:bvp2} has
+% a unique solution in the Sobolev space $H_0^1(\Omega)\cap H^2(\Omega)$ for all
+% functions $f\in L^2(\Omega)$ \cite{FraLiuRooStyZho09}.
+%
+% We assume that the parameters of the problem, i.e. $\epsilon, \alpha, \beta$,
+% $f$, $g$, are chosen so that the solution $u(x,y)$ has one boundary layer at
+% $y=1$. A common approach for discretizing these types of problems is to resolve
+% the boundary layers using a Shishkin mesh discretization, a scheme which uses
+% pieceswise-uniform meshes that are constructed a priori. This technique has
+% been described in detail, for example, in the survey
+% article~\cite[Section~5]{Sty05} or \cite{KopOri10} and the
+% book~\cite{MilOriShi96}. We therefore only state the facts that are relevant
+% for our analysis.
+%
+% In order to obtain a satisfactoy approximation to the solution
+% of~\eqref{eq:2D:bvp2}, we will discretize the two-dimensional domain using a mesh
+% that is refined inside the layer; a very similar approach to the one used in
+% the one-dimensional case (see \cite{EchLieSzyTic18}). To this end, we use a
+% hybrid discretization procedure which combines the use of a uniform mesh in
+% the $x$-direction with a Shishkin mesh in the $y$-direction.
+%
+% Let the positve real number $J\geq 3$ represent the number of intervals used in
+% the homogenous mesh in the $x$-direction, and the even positive integer
+% $N\geq 4$ denote the number of mesh intervals used for the Shishkin mesh in
+% the $y$-direction. We define the transition parameter $\tau_y$, which will be
+% used to specify where the mesh changes from coarse to fine in, by
+% %
+% \begin{equation}\label{eq:tau}
+% \tau_y \equiv \min\left\{\frac12,2\frac{\epsilon}{\alpha_2}  \ln N\right\}.
+% \end{equation}
+% %
+% The assumption $\alpha_2\gg \epsilon$ (equivalently $\epsilon \leq CN^{-1}$)
+% leads to the value $\tau_y=2\frac{\epsilon}{\alpha_2}\ln N\ll 1$,
+% so that the \emph{mesh transition point} $1-\tau_y$ will be very close to $y=1$.
+% The use of this hybrid scheme will divide the domain $\Omega$ into two
+% overlapping subdomains, $\overline{\Omega}=\Omega_{1}\cup\Omega_{2}$, where
+% %
+% \[
+% \Omega_{1}=[0,1]\times[0,1-\tau_y],\quad\Omega_{2}=[0,1]\times[1-\tau_y,1],
+% \]
+% %
+% this subdivision is shown in the left side of Figure~\ref{fig:2Ddomain}.
+% %
+% \begin{figure}[h!]
+% \hspace*{-2em}
+% \begin{minipage}[b]{0.5\textwidth}
+% \begin{center}
+% \begin{tikzpicture}[scale = 0.4]
+% %%%% Rectangle:
+% \draw (0,0) rectangle (10, 10);
+% %%%% horizontal lines and $y$
+% \node[left] at (0,10) {$1$};
+% \draw (0,8) node[left] {$1-\tau_y$} -- (10,8);
+% \node[left] at (0,0) {$0$};
+% \node[below] at (0,0) {$0$};
+% \node[below] at (10,0) {$1$};
+% %%%% Black dots:
+% \draw[black,fill=black] (0,8) circle (0.5ex);
+% %%%% Tile labels
+% \node at (5,4) {$\Omega_1$};
+% \node at (5,9) {$\Omega_2$};
+% \end{tikzpicture}
+% \end{center}
+% \end{minipage}
+% %
+% \hspace*{1em}
+% %
+% \begin{minipage}[b]{0.5\textwidth}
+% \begin{center}
+% \begin{tikzpicture}[scale = 0.4]
+% %%%% Rectangle:
+% \draw (0,0) rectangle (10, 10);
+%
+% %%%% horizontal lines and $y$
+% \foreach \point in {2,4,6,8,8.5,9,9.5}
+% \draw (0,\point) -- (10,\point);
+% \node[left] at (0,10) {$y_N$};
+% \node[left] at (0,8)  {$y_n$};
+% \node[left] at (0,0)  {$y_0$};
+%
+% %%%% vertical lines and $x$:
+% \foreach \point in {2,4,6,8}
+% \draw (\point,0) -- (\point,10);
+% \node[below] at (0,0) {$x_0$};
+% \node[below] at (10,0) {$x_J$};
+%
+% %%%% Black dots:
+% \draw[black,fill=black] (0,8) circle (0.5ex);
+% %%%% Tile labels
+% \draw (5,10) node[above] {$H_x$};
+% \draw (10,2.5) node[right] {$H_y$};
+% \draw (10,8.7) node[right] {$h_y$};
+% \end{tikzpicture}
+% \end{center}
+% \end{minipage}
+% %\includegraphics[width=0.9\linewidth]{figures/simpleShish2D3.pdf}
+% \caption{Division of the domain and Shishkin mesh for equation \eqref{eq:2D:bvp2}
+% with one outflow exponential layer.}
+% \label{fig:2Ddomain}
+% \end{figure}
+%
+% Let $n\equiv \frac{N}{2}$, if we denote the mesh width in the $x$-direction
+% by $H_x$ and the mesh widths inside and outside the boundary layer in the
+% $y$-direction by $h_y$ and $H_y$, i.e.,
+% %
+% \begin{equation}\label{eq:nHh}
+% H_x:=\frac{1}{J},
+% \;\;\quad
+% h_y:=\frac{\tau_y}{n},
+% \;\;\quad\mbox{and}\;\;\quad
+% H_y:=\frac{( 1-\tau_y)}{n},
+% \end{equation}
+% then the $N+1$ nodes of the Shishkin mesh are given by
+% \[
+% \Omega^N=\{(x_i,y_j)\in\overline{\Omega}:i=0,\ldots,J; j=0,\ldots,N\},
+% \]
+% where
+% %
+% \[x_i\equiv iH_x,\;\mbox{for}\;\; i=0,\ldots,J,
+% \quad \mbox{ and } \quad
+% y_j\equiv
+% \begin{cases} jH_y &\mbox{for}\;\; j=0,\ldots,n, \\
+% 1-(N-j)h_y &\mbox{for}\;\; j=n+1,\ldots,N. \end{cases}\]
+% %
+% The mesh is constructed by drawing lines parallel to the coordinate axes
+% through these mesh points; see the right side of Figure~\ref{fig:2Ddomain}.
+% Here $x_0=y_0=0$ and $x_J=y_N=1$ so that the mesh consists of $K:=J-1$ interior
+% nodes in the $x$-direction and $M:=N-1$ interior nodes in the $y$-direction,
+% where the node $y_n$ is exactly at the transition point $1-\tau_y$.
+% It is clear that the mesh widths on $\Omega_{1}$ satisfy $1/J\leq H_x\leq 2/J$
+% and $1/N\leq H_y\leq 2/N$ so the mesh is coarse in this domain. On the other
+% hand, $h_y$ is $\mathscr{O}(\epsilon N^{-1}\log(N))$, so on $\Omega_2$ the mesh
+% is coarse in the $x$ direction and fine in the $y$ direction.  The ratio
+% between the different mesh sizes in the $y$ direction is
+% %
+% \[\frac{h_y}{H_y}=\frac{\tau_y}{1-\tau_y}=\tau_y+{\cal O}(\tau_y^2) \ll 1.\]
+%
+% Using the standard upwind finite difference operators and the lexicographical
+% line ordering of the unknowns of the hybrid mesh, the finite difference scheme
+% yields a linear algebraic system $Au^{N}=f^{N}$ of the form \eqref{eq:2D:blockmat}
+% with the block-tridiagonal matrix $A$ given by
+% \begin{equation}\label{eq:back:2Dmatrix}
+% A=\left[
+%   \begin{array}{cccc|c|cccc}
+%      A_{H} & B_{H}    &  &  &  &  &  &  &  \\
+%      C_H &\ddots &\ddots  &  &  &  &  &  &  \\
+%      &  \ddots& \ddots &  B_{H}   &  &  &  &  &  \\
+%      &  &C_H & A_{H}  &  B_{H}   &  &  &  &  \\ \hline
+%      &  &  & \hat{C}  & \hat{A}  & \hat{B}  &  &  &  \\ \hline
+%      &  &  &  & C_{h}  & A_{h} & B_{h}  &  &  \\
+%      &  &  &  &  & C_{h}  & \ddots & \ddots &  \\
+%      &  &  &  &  &  & \ddots & \ddots & B_{h}  \\
+%      &  &  &  &  &  &  & C_{h}  & A_{h}  \\
+%   \end{array}
+% \right]\;\in\;{\mathbb R}^{M^2\times M^2},
+% \end{equation}
+% where $M\equiv N-1$.
+% The blocks $C_H$, $A_H$, $B_H$, etc., each of dimension $M\times M$, in
+% \eqref{eq:back:2Dmatrix} are given by
+% \begin{eqnarray}
+% C_H&=&\text{diag}(\entryvS),\quad A_H=\text{tridiag}(\entryvW,\entryvC,\entryvE),
+% \quad B_H=\text{diag}(\entryvN),\nonumber\\
+% \hat{C}&=&\text{diag}(\entryzS), \qquad \,\,\hat{A}=\text{tridiag}(\entryzW,\entryzC,\entryzE),\qquad\quad\,\,\,\, \hat{B}=\text{diag}(\entryzN),\\
+% C_h&=&\text{diag}(\entrywS),\quad\,\,\, A_h=\text{tridiag}(\entrywW,\entrywC,\entrywE), \quad \,\,\,\,B_h=\text{diag}(\entrywN),\nonumber
+% \end{eqnarray}
+% where the entries are given by
+% \begin{scriptsize}
+% \begin{align*}
+% \hspace{-3em}
+% 	&\entryvS  =  - \frac{\epsilon}{H_y^{2}}-\frac{\alpha_2}{H_y},&
+%     &\entryvW  =  -\frac{\epsilon}{H_x^{2}}- \frac{\alpha_1}{H_x},&
+%     &\entryvC  =  \frac{2\epsilon}{H_x^{2}} +\frac{2\varepsilon}{H_y^{2}} +\frac{\alpha_1}{H_x}+\frac{\alpha_2}{H_y}+\beta,
+%     &\entryvE  =  -\frac{\epsilon}{H_x^{2}}, &
+%     &\entryvN  =  - \frac{\epsilon}{H_y^{2}}, \\
+%     &\entryzS  =  - \frac{2\epsilon}{H_y(H_y+h_y)}-\frac{\alpha_2}{H_y},&
+%     &\entryzW  =  -\frac{\epsilon}{H_x^{2}} - \frac{\alpha_1}{H_x},&
+%     &\entryzC  =  \frac{2\epsilon}{H_x^{2}} +\frac{2\varepsilon}{H_yh_y} +\frac{\alpha_1}{H_x}+\frac{\alpha_2}{H_y}+\beta,
+%     &\entryzE  =  -\frac{\epsilon}{H_x^{2}}, &
+%     &\entryzN  =  - \frac{2\epsilon}{h_y(H_y+h_y)},\label{eq:2D:upwind}\\
+%     &\entrywS  =  - \frac{\epsilon}{h_y^{2}}-\frac{\alpha_2}{h_y},&
+%     &\entrywW  =  -\frac{\epsilon}{H_x^{2}}- \frac{\alpha_1}{H_x},&
+%     &\entrywC  =  \frac{2\epsilon}{H_x^{2}} +\frac{2\varepsilon}{h_y^{2}} +\frac{\alpha_1}{H_x}+\frac{\alpha_2}{h_y}+\beta,
+%     &\entrywE  =  -\frac{\epsilon}{H_x^{2}}, &
+%     &\entrywN  =  - \frac{\epsilon}{h_y^{2}}.
+% \end{align*}
+% \end{scriptsize}
+% That is, our matrix takes the form
+% \begin{equation}
+% A=\left[
+%   \begin{array}{c|c|c}
+%              \matAHhat         & e_{m}\otimes\matBH   &                           \\ \hline
+%     e_{m}^{\Tr}\otimes\hat{C}  &   \hat{A}            & e_{1}^{\Tr}\otimes\hat{B} \\ \hline
+%                                & e_{1}\otimes\matCh   &        \matAhhat  \\
+%   \end{array}
+% \right],
+% \end{equation}
+% which has the same structure as \eqref{eq:2D:blockmat}.
+%
+
+
+% \section{Differences to 1D}
+% \label{2D:Difference}
