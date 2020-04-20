@@ -6,6 +6,6 @@ period from 2014 to 2020. The `MATLAB` code to reproduce all numerical experimen
 To compile the pdf file use:
 ```
 > pdflatex dissertation.tex
-> bibtex dissertation'
+> bibtex dissertation
 > bpdflatex dissertation.tex
 ```
