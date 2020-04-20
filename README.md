@@ -5,7 +5,7 @@ The MATLAB code to reproduce all numerical experiments is also included.
 
 to compile pdf use:
 ```
-pdflatex dissertation.tex
-bibtex dissertation'
-bpdflatex dissertation.tex
+> pdflatex dissertation.tex
+> bibtex dissertation'
+> bpdflatex dissertation.tex
 ```
