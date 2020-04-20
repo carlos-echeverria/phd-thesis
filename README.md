@@ -4,7 +4,8 @@ Mathematics of the Technishe Universität Berlin under the supervision of Prof. 
 The MATLAB code to reproduce all numerical experiments is also included.
 
 to compile use:
-
-'> pdflatex dissertation.pdf'
-'> bibtex dissertation'
-'> pdflatex dissertation.pdf'
+"""
+> pdflatex dissertation.pdf
+> bibtex dissertation'
+> pdflatex dissertation.pdf
+"""
