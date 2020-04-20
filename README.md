@@ -7,5 +7,5 @@ To compile the pdf file use:
 ```
 > pdflatex dissertation.tex
 > bibtex dissertation
-> bpdflatex dissertation.tex
+> pdflatex dissertation.tex
 ```
