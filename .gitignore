@@ -9,6 +9,8 @@
 
 *.m~
 
+*.fig
+
 *_extras.tex
 
 *.avi
