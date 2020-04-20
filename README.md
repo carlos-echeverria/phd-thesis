@@ -3,7 +3,7 @@ Repository with `LaTeX` files to compile the pdf file of my Ph.D. thesis written
 the Institute for Mathematics of the Technishe Universität Berlin under the supervision of Prof. Dr. Jörg Liesen during the 
 period from 2014 to 2020. The `MATLAB` code to reproduce all numerical experiments is also included in the repository.
 
-To compile pdf file use:
+To compile the pdf file use:
 ```
 > pdflatex dissertation.tex
 > bibtex dissertation'
