@@ -1308,13 +1308,13 @@ Hence, we obtain an upper bound for the convergence factors $\rho_{12}$ and $\rh
 \leq \eta_{h,\infty}^{\klein{\min}}\eta_{H,\infty}^{\klein{\min}} \leq \left|\frac{e_H}{d_H}\right|\equiv \rho.
 \end{equation*}
 %
-Lastly, for the norms $\| \T_{ij} \|$ we obtain
+Lastly, for the norms $\| \T_{ij} \|_{\infty}$ we obtain
 %
 \[
-	\| \T_{12} \| \leq
+	\| \T_{12} \|_{\infty} \leq
 	\eta_{H,\klein{\infty}} \leq
 	\left|\frac{e_H}{d_H}\right|,\qquad
-	\| \T_{21} \| \leq \eta_{h,\klein{\infty}}^{\klein{\min}} \leq 1\,.
+	\| \T_{21} \|_{\infty} \leq \eta_{h,\klein{\infty}}^{\klein{\min}} \leq 1\,.
 \]
 Substituting the values of $e_H$ and $d_H$ given in \eqref{eq:back:upwind2D}
 yields the desired result.
@@ -1426,7 +1426,7 @@ implementation of the GMRES method callable with the command \texttt{gmres}.
 We first consider $N = 30$ and $M = 40$ intervals in the corresponding $x-$ and
 $y-$coordinate directions of the mesh, obtaining a linear system with a coefficient matrix  $\A\in\mathbb{R}^{(N-1)\times(M-1)}$ of size $1131 \times 1131$. Figures~\ref{fig:2D:err1}--\ref{fig:2D:err2} show the error norms
 \[
-\frac{\|\e^{(k)}\|_\infty}{\|\e^{(0)}\| },\;k=0,1,2,\ldots,
+\frac{\|\e^{(k)}\|_\infty}{\|\e^{(0)}\|_\infty },\;k=0,1,2,\ldots,
 \]
 for the iteration matrices $\T_{12}=\Q_2\Q_1$ and $\T_{21}=\Q_1\Q_2$ (solid lines) as well as
 the corresponding error bounds of Corollary~\ref{cor:2D:conv-diff} for
