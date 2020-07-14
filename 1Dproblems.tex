@@ -520,8 +520,8 @@ Thus, both iteration matrices have rank one, and we can apply to them the
 following observation.
 
 \begin{prop} \label{prop:1D:rank.one}
-Let $\T$ be a square matrix of rank one, i.e., $\T=\u\v^T$ for some
-vectors $\u, \v$. Then $\T^2 = \rho \T$, with $\rho = \v^{\Tr}\u$, and as
+Let $\T$ be a square matrix of rank one, i.e., $\T=\u\vv^T$ for some
+vectors $\u, \vv$. Then $\T^2 = \rho \T$, with $\rho = \vv^{\Tr}\u$, and as
 a consequence $\T^{k+1} = \rho^{k} \T$, for $k\geq 0$.
 \end{prop}
 
@@ -1371,7 +1371,7 @@ method as a preconditioner for GMRES.
 Based on \eqref{eq:back:schwarz}, it is clear that the multiplicative Schwarz
 method can be seen as a {\em Richardson iteration} for the system
 \begin{equation}\label{eq:1D:precond}
-(\I-\T_{ij})\u=\v.
+(\I-\T_{ij})\u=\vv.
 \end{equation}
 Furthermore, the iteration scheme \eqref{eq:back:schwarz} can be written in the form
 \begin{equation*}%\label{eq:schwarz2}

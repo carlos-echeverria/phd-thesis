@@ -2160,19 +2160,19 @@ Krylov subspace methods are projection methods where the search space,
 $\mathscr{K}$ in \eqref{eq:back:gneral_prj} is a Krylov subspace, i.e., a
 subspace of the form:
 \begin{equation}\label{eq:back:krylov}
-\mathscr{K}_{n}(\A,\v)\equiv\text{span}\{\v,\A\v,\A^2\v,\ldots,\A^{n-1}\v\}.
+\mathscr{K}_{n}(\A,\vv)\equiv\text{span}\{\vv,\A\vv,\A^2\vv,\ldots,\A^{n-1}\vv\}.
 \end{equation}
 
 The plethora of solution methods that fall under the classification of Krylov subspace methods  arise by choosing different subspaces for the constraint space $\mathscr{L}$. Moreover, given the construction of the search space $\mathscr{K}_{n}$, we can see that the approximations to the solution of \eqref{eq:back:linsys} will be of the form
 \begin{equation}
-\u^{(n)}=p_{n}(\A)\v,
+\u^{(n)}=p_{n}(\A)\vv,
 \end{equation}
 where $p_{n}(x)$ is a polynomial of degree at most $n$. Thus, all approximate
 solutions obtained with Krylov subspace methods will be of polynomial type and,
 as mentioned above, the choice of constraint space will have dramatic changes
 in how this polynomial is constructed by each method.
 
-The generalized minimal residual method, introduced by Saad in \cite{Saa86} and known as the GMRES method in short, is defined by choosing $\mathscr{K}=\mathscr{K}_m$ with $\v=\r^{(0)}$ and $\mathscr{L}=\A\mathscr{K}_m$. This choice of search and constraint spaces minimizes the residual norm over all vectors in $\mathscr{K}_m$ \cite{Saa03}, i.e., after computing the initial residual $\r^{(0)}=\f-\A\u^{(0)}$, using the initial guess $\u^{(0)}$, the GMRES method computes a sequence of iterates $\u^{(1)},\ldots,\u^{(n)}$
+The generalized minimal residual method, introduced by Saad in \cite{Saa86} and known as the GMRES method in short, is defined by choosing $\mathscr{K}=\mathscr{K}_m$ with $\vv=\r^{(0)}$ and $\mathscr{L}=\A\mathscr{K}_m$. This choice of search and constraint spaces minimizes the residual norm over all vectors in $\mathscr{K}_m$ \cite{Saa03}, i.e., after computing the initial residual $\r^{(0)}=\f-\A\u^{(0)}$, using the initial guess $\u^{(0)}$, the GMRES method computes a sequence of iterates $\u^{(1)},\ldots,\u^{(n)}$
 such that the $n$-th residual satisfies
 \begin{equation}
 \|\r^{(n)}\|=\|p_{n}(\A)\r^{(0)}\|=\min_{p \in \pi_n}\|p(\A)\r^{(0)}\|,
@@ -2513,15 +2513,15 @@ Starting with an initial vector $\u^{(0)}\in{\mathbb R}^{N(2m+ 1)}$,
 the multiplicative Schwarz method is defined by
 %
 \begin{equation}\label{eq:back:schwarz}
-\u^{(k+1)}=\T_{ij} \u^{(k)}+\v, \quad k=0,1,2,\dots,
+\u^{(k+1)}=\T_{ij} \u^{(k)}+\vv, \quad k=0,1,2,\dots,
 \end{equation}
 %
 where $\T_{ij}=\T_{12}$ or $\T_{ij}=\T_{21}$, and the vector
-$\v\in {\mathbb R}^{N-1}$ is defined to make the method consistent.
+$\vv\in {\mathbb R}^{N-1}$ is defined to make the method consistent.
 For the iteration matrix $\T=\T_{ij}$ the consistency condition
-$\u=\T_{ij}\u+\v$ yields
+$\u=\T_{ij}\u+\vv$ yields
 $$
-\v = (\I-\T_{ij})\u = (\P_i+\P_j-\P_j\P_i)\u,
+\vv = (\I-\T_{ij})\u = (\P_i+\P_j-\P_j\P_i)\u,
 $$
 which is (easily) computable since
 $$
@@ -2531,7 +2531,7 @@ $$
 The error of the multiplicative Schwarz iteration~\eqref{eq:back:schwarz} is
 given by
 \begin{equation}\label{eq:back:schwarz_err}
-\e^{(k+1)}=\u-\u^{(k+1)}=(\T_{ij}\u + \v)- (\T_{ij} \u^{(k)}+\v)=\T_{ij} \e^{(k)},
+\e^{(k+1)}=\u-\u^{(k+1)}=(\T_{ij}\u + \vv)- (\T_{ij} \u^{(k)}+\vv)=\T_{ij} \e^{(k)},
 \quad k=0,1,2,\dots,
 \end{equation}
 and hence $\e^{(k+1)}=\T_{ij}^{k+1} \e^{(0)}$ by induction.

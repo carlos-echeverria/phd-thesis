@@ -1195,9 +1195,9 @@ $\matAH^{-1}$, $\matA^{-1}$, and $\matAh^{-1}$.
 First note that for any nonsingular matrix $\M$ and an
 induced matrix norm we have
 \[
-\|\M^{-1}\|=\max_{\|\v\|=1}\left\Vert \M^{-1}\left(\frac{\M\v}{\|\M\v\|}\right)\right\Vert =\frac{1}{\min_{\|\v\|=1}\|\M \v\|}.
+\|\M^{-1}\|=\max_{\|\vv\|=1}\left\Vert \M^{-1}\left(\frac{\M\vv}{\|\M\vv\|}\right)\right\Vert =\frac{1}{\min_{\|\vv\|=1}\|\M \vv\|}.
 \]
-Therefore, if $\|\M \v\|\geq\gamma>0$ for any unit norm vector $\v$,
+Therefore, if $\|\M \vv\|\geq\gamma>0$ for any unit norm vector $\vv$,
 then $\|\M^{-1}\|\leq{\gamma^{-1}}$.
 
 
@@ -1208,13 +1208,13 @@ where $\hat{a}>0$, $\hat{b}<0$, $\hat{c}<0$, and
 $
 \hat{a}+\hat{b}+\hat{c}>0.
 $
-We would like to bound $\|\M \v\|_{\infty}$ for any unit norm vector $\v$
-from below. If $\|\v\|_{\infty}=1$, then there is an index $i$ such that
+We would like to bound $\|\M \vv\|_{\infty}$ for any unit norm vector $\vv$
+from below. If $\|\vv\|_{\infty}=1$, then there is an index $i$ such that
 $|v_{i}|=1$. Without loss of generality we can assume that $v_{i}=1$, because
-changing the sign of the vector does not change $\|\M \v\|_{\infty}$.
+changing the sign of the vector does not change $\|\M \vv\|_{\infty}$.
 Defining $v_{0}=0$ and $v_{n+1}=0$ we obtain
 \[
-\|\M \v\|_{\infty}\geq|v_{i-1}\hat{c}+\hat{a}+v_{i+1}\hat{b}|\geq \hat{a}+\hat{b}+\hat{c},
+\|\M \vv\|_{\infty}\geq|v_{i-1}\hat{c}+\hat{a}+v_{i+1}\hat{b}|\geq \hat{a}+\hat{b}+\hat{c},
 \]
 and therefore
 \begin{equation}\label{eqn:boundT}
@@ -1337,7 +1337,7 @@ problem~\eqref{eq:1D:bvp} studied in Chapter~\ref{ch:1D}.
 As we have seen in Chapter~\ref{ch:1D}, the multiplicative
 Schwarz method as well as GMRES applied to the preconditioned system
 \begin{equation}\label{eq:2D:precond}
-(\I-\T_{ij})\u=\v
+(\I-\T_{ij})\u=\vv
 \end{equation}
 obtain their approximations from the Krylov subspace
 $\mathscr{K}_k(\I-\T_{ij},\r^{(0)})$.
