@@ -1902,13 +1902,7 @@ errors, deliver an \emph{exact} solution. In the following we only provide a bri
 Starting with an initial approximate solution vector, $\u^{(0)}$, stationary
 iterative methods (fixed-point iteration methods) modify individual or groups
 of components of the vector at each iteration step until a desired tolerance of
-approximation is reached. This is achieved by eliminating certain components of
-the residual vector,
-\begin{equation}
-\r\equiv\f-\A\u,
-\label{eq:back:residual}
-\end{equation}
-at each step. Although these methods are rarely used by themselves to obtain solutions to \eqref{eq:back:linsys}, when used as \emph{preconditioners} to Kyrlov subspace methods, they can deliver fast and efficient results.
+approximation is reached. Although these methods are rarely used by themselves to obtain solutions to \eqref{eq:back:linsys}, when used as \emph{preconditioners} to Kyrlov subspace methods, they can deliver fast and efficient results.
 
 Krylov subspace methods are a more sophisticated type of iterative methods,
 which fall under the mathematical framework of \textit{projection methods},
@@ -1918,14 +1912,21 @@ whose general idea is based on what is known in literature as the
 its approximate solutions from a subspace of $\mathbb{R}^{N}$, say $\mathscr{K}$, commonly known as the \emph{search space}.
 If $\mathscr{K}$ is of dimension $n$, then in order to obtain an approximate
 solution, $\hat{\u}$, to \eqref{eq:back:linsys} from this subspace, $n$
-constraints must be imposed. Typically, the constrains consist of $n$ orthogonality conditions on the residual vector \eqref{eq:back:residual} with respect to $n$ linearly independent vectors which define another subspace of $\mathbb{R}^{N}$ also with dimension $n$, say $\mathscr{L}$, known as the
+constraints must be imposed. Typically, the constrains consist of $n$ orthogonality conditions on the residual vector, $\r\equiv\f-\A\u$,
+% \begin{equation}
+% \r\equiv\f-\A\u,
+% \label{eq:back:residual}
+% \end{equation}
+ with respect to $n$ linearly independent vectors which define another subspace of $\mathbb{R}^{N}$ also with dimension $n$, say $\mathscr{L}$, known as the
 \textit{constraint space}. Thus the Petrov-Galerkin conditions lead to the general projection method:
 \begin{equation}
-\text{Find } \hat{\u}\in\mathscr{K}\text{ such that } \f-\A\hat{\u}\perp\mathscr{L}.
+\text{Find } \hat{\u}\in\u^{(0)}+\mathscr{K}\text{ such that } \f-\A\hat{\u}\perp\mathscr{L}.
 \label{eq:back:gneral_prj}
 \end{equation}
 
-The approach given by \eqref{eq:back:gneral_prj} is the most general formulation of a projection method and many modifications can be made to improve the solution process, like exploiting the knowledge of an initial vector $\u^{(0)}$, however a detailed explanation of these methods falls outside of the scope of this thesis. For an thorough description and treatment of projection methods for solving linear systems we point to the Ph.D. thesis \cite{Gaul14}. For a very complete survey on the general area of iterative solvers for solving linear systems please see \cite{Saa03} or the very compact but excellently written \cite{Gre97}. For an in-depth analysis of Krylov subspace methods including its historical development see the monograph \cite{LieStr12}.
+The approach given by \eqref{eq:back:gneral_prj} is the most general formulation of a projection method which exploits the knowledge of the initial approximation vector $\u^{(0)}$, however, a detailed explanation of these methods falls outside of the scope of this thesis.
+
+For a thorough description and treatment of projection methods for solving linear systems we point to the Ph.D. thesis \cite{Gaul14}. For a very complete survey on the general area of iterative solvers for solving linear systems please see \cite{Saa03} or the very compact but excellently written \cite{Gre97}. For an in-depth analysis of Krylov subspace methods as well as their historical development and state of the art see the monograph \cite{LieStr12}.
 
 \subsection{Stationary Iterative Methods}
 \label{back:itersolvers:class_sol}
@@ -2028,7 +2029,7 @@ while the \emph{spectral radius}, $\rho(\cdot)$, of an $N\times N$ complex matri
 \rho(\A)\equiv\max_{1\leq i\leq N}|\lambda_i|.
 \end{equation*}
 % where $\lambda_i$ are the eigenvalues of the matrix $\A$.
-On the one hand the spectral radius can be interpreted geometrically as the smallest circle in the complex plane with center at the origin and which includes all the eigenvalues of the matrix $\A$. The spectral norm, on the other hand, can be intuitively understood as the maximum `scale' by which a matrix can `stretch' a vector. Furthermore, we can relate both quantities; using the sumbultiplicativity property of the spectral norm it is easy to see that for a general $N\times N$ complex matrix $\A$ we have that the condition
+On the one hand the spectral radius can be interpreted geometrically as the smallest circle in the complex plane with center at the origin and which includes all the eigenvalues of the matrix $\A$. The spectral norm, on the other hand, can be intuitively understood as the maximum `scale' by which a matrix can `stretch' a vector. Furthermore, we can relate both quantities; using the sumbultiplicativity property of the spectral norm it is easy to see that for a general $N\times N$ complex matrix $\A$ and any consistent pair of vector and matrix norms, we have that the condition
 \begin{equation*}
 \|\A\|\geq \rho(\A),
 \label{eq:back:norm_and_rad}
@@ -2044,7 +2045,7 @@ In turn, this is the case if and only if the norm of each powers of the iteratio
 \begin{equation*}
 \|(\M^{-1}\N)^{k}\|\to0\text{ as } k\to\infty,
 \end{equation*}
-i.e., we will only achieve convergence to the solution of the linear system if the iteration matrix is convergent. Using the Jordan decomposition of a general matrix $\A\in\mathbb{C}^{N\times N}$, Theorem 1.10 in \cite{Var09} gives exact conditions for this to happen:
+i.e., we will only achieve convergence to the solution of the linear system if the iteration matrix is convergent. In the proof of \cite[Theorem 1.10]{Var09} the author uses the Jordan decomposition of a general matrix $\A\in\mathbb{C}^{N\times N}$ to show the following result, which gives the exact conditions for this to happen:
 \begin{equation}
 \A\in\mathbb{C}^{N\times N}\text{ is convergent if and only if } \rho(\A)<1.
 \label{eq:back:convergence}
@@ -2053,7 +2054,7 @@ Thus, an iteration of the form \eqref{eq:back:fixedpt} is convergent if and only
 \begin{equation}
 \rho(\M^{-1}\N)<1.
 \end{equation}
-It is also important to note that given the relation
+The previous condition is necessary since, in order to show that the mapping $\u^{(k)}\mapsto\u^{(k+1)}$ is indeed a contraction that leads to the fixed-point, the powers of the iteration matrix need to approach zero as the iteration progresses. In turn, the only way for this to happen - evident by considering the Jordan decomposition of $\M^{-1}\N$, is when all eigenvalues of the matrix are less than $1$. The condition is also sufficient for convergence since the powers of a matrix with all of its eigenvalues less than $1$ will tend to zero. It is also important to note that given the relation
 \begin{equation*}
 \label{eq:back:itermat}
 \M^{-1}\N = \M^{-1}(\M-\A) = \I - \M^{-1}\A,
@@ -2152,7 +2153,7 @@ In the main chapters of this work we will focus on finding expressions that boun
 % of GMRES when used to solve the preconditioned system \eqref{eq:1D:precls}.
 
 
-
+\newpage
 \subsection{Krylov Subspace Methods and GMRES}
 \label{back:itersolvers:krylov}
 
@@ -2165,14 +2166,14 @@ subspace of the form:
 
 The plethora of solution methods that fall under the classification of Krylov subspace methods  arise by choosing different subspaces for the constraint space $\mathscr{L}$. Moreover, given the construction of the search space $\mathscr{K}_{n}$, we can see that the approximations to the solution of \eqref{eq:back:linsys} will be of the form
 \begin{equation}
-\u^{(n)}=p_{n}(\A)\vv,
+\u^{(n)}=\u^{(0)}+p_{n}(\A)\vv,
 \end{equation}
 where $p_{n}(x)$ is a polynomial of degree at most $n$. Thus, all approximate
 solutions obtained with Krylov subspace methods will be of polynomial type and,
 as mentioned above, the choice of constraint space will have dramatic changes
 in how this polynomial is constructed by each method.
 
-The generalized minimal residual method, introduced by Saad in \cite{Saa86} and known as the GMRES method in short, is defined by choosing $\mathscr{K}=\mathscr{K}_m$ with $\vv=\r^{(0)}$ and $\mathscr{L}=\A\mathscr{K}_m$. This choice of search and constraint spaces minimizes the residual norm over all vectors in $\mathscr{K}_m$ \cite{Saa03}, i.e., after computing the initial residual $\r^{(0)}=\f-\A\u^{(0)}$, using the initial guess $\u^{(0)}$, the GMRES method computes a sequence of iterates $\u^{(1)},\ldots,\u^{(n)}$
+The generalized minimal residual method, introduced by Saad in \cite{Saa86} and known as the GMRES method in short, is defined by choosing $\mathscr{K}=\mathscr{K}_n$ with $\vv=\r^{(0)}$ and $\mathscr{L}=\A\mathscr{K}_n$. This choice of search and constraint spaces minimizes the residual norm over all vectors in $\mathscr{K}_n$ \cite{Saa03}, i.e., after computing the initial residual $\r^{(0)}=\f-\A\u^{(0)}$, using the initial guess $\u^{(0)}$, the GMRES method computes a sequence of iterates $\u^{(1)},\ldots,\u^{(n)}$
 such that the $n$-th residual satisfies
 \begin{equation}
 \|\r^{(n)}\|=\|p_{n}(\A)\r^{(0)}\|=\min_{p \in \pi_n}\|p(\A)\r^{(0)}\|,
@@ -2483,7 +2484,7 @@ matrices
 \end{equation}
 %
 where $m\equiv n-1$, and $\e_1,\e_m\in {\mathbb R}^m$. In the following, the
-unit basis vectors $e_j$ are always considered to be of appropriate length,
+unit basis vectors $\e_j$ are always considered to be of appropriate length,
 which for simplicity is sometimes not explicitly stated. Note that
 $\matAH, \matAh\in \mathbb{R}^{m\times m}$ are tridiagonal Toeplitz matrices.
 The matrices corresponding to the solves on the two domains then are given by
